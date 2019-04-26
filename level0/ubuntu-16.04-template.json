@@ -1,0 +1,70 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "insecure_connection": "true",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+
+      "vm_name": "ubuntu-16.04-template",
+      "folder": "templates",
+      "vm_version": 11,
+      "cpu_cores": 4,
+      "cpus": 4,
+      "ram": "2048",
+      "network": "Public LAN",
+      "network_card": "vmxnet3",
+      "guest_os_type": "ubuntu64Guest",
+      "datastore": "{{user `vcenter_datastore`}}",
+      "iso_paths": "[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso",
+      "floppy_files": ["{{template_dir}}/ubuntu-16.04-preseed.cfg"],
+
+      "disk_controller_type": "pvscsi",
+      "disk_size": 32768,
+      "disk_thin_provisioned": true,
+
+      "communicator": "ssh",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+
+      "create_snapshot": false,
+      "convert_to_template": true,
+
+      "boot_command": [
+        "<enter><wait><f6><wait><esc><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs>",
+        "/install/vmlinuz",
+        " initrd=/install/initrd.gz",
+        " priority=critical",
+        " locale=en_US",
+        " file=/media/ubuntu-16.04-preseed.cfg",
+        "<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "/Users/chris/.ssh/id_rsa.pub",
+      "destination": "/home/user/"
+    },
+    {
+      "type": "shell",
+      "scripts": ["machines/level0/ubuntu-16.04-template-setup.sh"],
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    }
+  ]
+}
