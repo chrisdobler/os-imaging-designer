@@ -9,8 +9,8 @@
       "datacenter": "{{user `vcenter_datacenter`}}",
       "resource_pool": "{{user `vcenter_resource_pool`}}",
 
-      "template": "templates/ubuntu-16.04-template-dhcp",
-      "vm_name": "ds-unifi-network",
+      "template": "templates/ubuntu-16.04-template",
+      "vm_name": "{{user `name-ds-pi-hole`}}",
       "cluster": "{{user `vcenter_cluster`}}",
       "host": "{{user `vcenter_host`}}",
       "datastore": "{{user `vcenter_datastore`}}",
@@ -27,7 +27,17 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "machines/ds-unifi-network/ds-unifi-network-setup.sh",
+      "script": "packer-scripts/pi-hole/pi-hole-network-setup.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "configuration/ds-pi-hole/etc/NetworkManager/NetworkManager.conf",
+      "destination": "/home/user/"
+    },
+    {
+      "type": "shell",
+      "script": "packer-scripts/pi-hole/pi-hole-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
