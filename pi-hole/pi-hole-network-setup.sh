@@ -13,7 +13,7 @@ sudo nmcli con add type ethernet con-name ethernet ifname ens192
 
 sudo nmcli con mod "ethernet"\
   ipv4.addresses "192.168.16.4/24"\
-  ipv4.gateway "192.168.16.10"\
+  ipv4.gateway "192.168.16.1"\
   ipv4.dns "192.168.16.2,8.8.8.8"\
   ipv4.dns-search "doblersystems.local"\
   ipv4.method "manual"

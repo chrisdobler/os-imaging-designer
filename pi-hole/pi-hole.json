@@ -7,7 +7,7 @@
       "password": "{{user `vcenter_password`}}",
       "insecure_connection": "true",
       "datacenter": "{{user `vcenter_datacenter`}}",
-      "resource_pool": "{{user `vcenter_resource_pool`}}",
+      "resource_pool": "{{user `vcenter_resource_pool_deployed`}}",
 
       "template": "templates/ubuntu-16.04-template",
       "vm_name": "{{user `name-ds-pi-hole`}}",
@@ -26,14 +26,14 @@
 
   "provisioners": [
     {
-      "type": "shell",
-      "script": "packer-scripts/pi-hole/pi-hole-network-setup.sh",
-      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
       "type": "file",
       "source": "configuration/ds-pi-hole/etc/NetworkManager/NetworkManager.conf",
       "destination": "/home/user/"
+    },
+    {
+      "type": "shell",
+      "script": "packer-scripts/pi-hole/pi-hole-network-setup.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
