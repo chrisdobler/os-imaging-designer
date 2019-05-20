@@ -27,7 +27,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "configuration/ds-pi-hole/etc/NetworkManager/NetworkManager.conf",
+      "source": "configuration/ds-pi-hole/etc/network/interfaces",
       "destination": "/home/user/"
     },
     {
