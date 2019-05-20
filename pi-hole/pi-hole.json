@@ -31,6 +31,11 @@
       "destination": "/home/user/"
     },
     {
+      "type": "file",
+      "source": "configuration/ds-pi-hole/etc/pihole/setupVars.conf",
+      "destination": "/home/user/"
+    },
+    {
       "type": "shell",
       "script": "packer-scripts/pi-hole/pi-hole-network-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
