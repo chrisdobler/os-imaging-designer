@@ -32,8 +32,8 @@
     },
     {
       "type": "file",
-      "source": "configuration/ds-pi-hole/etc/pihole/setupVars.conf",
-      "destination": "/home/user/"
+      "source": "configuration/ds-pi-hole/etc/pihole",
+      "destination": "/home/user"
     },
     {
       "type": "shell",
