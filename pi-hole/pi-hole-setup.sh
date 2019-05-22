@@ -1,7 +1,6 @@
 sudo apt-get install -y curl git
 
-sudo mkdir /etc/pihole
-sudo mv -v /home/user/pihole/ /etc/pihole/
+sudo mv -v /home/user/pihole/ /etc/
 
 git clone https://github.com/pi-hole/pi-hole.git
 
