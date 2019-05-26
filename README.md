@@ -58,7 +58,7 @@ BUILD
 
 ```
 packer build \
--var 'dominance=<master|slave>' \
+-var 'dominance=<master|backup>' \
 -var-file=configuration/packer-variables.json \
 packer-scripts/dhcp/dhcp.json
 ```

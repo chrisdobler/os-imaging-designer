@@ -10,7 +10,7 @@
       "resource_pool": "{{user `vcenter_resource_pool_deployed`}}",
 
       "template": "templates/ubuntu-16.04-template",
-      "vm_name": "{{user `name-{{user name-dhcp-server-master}}`}}",
+      "vm_name": "{{user `name-dhcp-server`}}{{user `dominance`}}",
       "cluster": "{{user `vcenter_cluster`}}",
       "host": "{{user `vcenter_host`}}",
       "datastore": "{{user `vcenter_datastore`}}",
@@ -27,11 +27,12 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "configuration/{{user name-dhcp-server-master}}/etc/network/interfaces",
+      "source": "configuration/{{user `name-dhcp-server`}}{{user `dominance`}}/etc/network/interfaces",
       "destination": "/home/user/"
+    },
     {
       "type": "file",
-      "source": "configuration/{{user name-dhcp-server-master}}/etc/dhcp",
+      "source": "configuration/{{user `name-dhcp-server`}}{{user `dominance`}}/etc/dhcp",
       "destination": "/home/user"
     },
     {
