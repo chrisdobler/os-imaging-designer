@@ -59,15 +59,28 @@ BUILD
 ```
 packer build \
 -var 'dominance=<master|backup>' \
+-var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
 -var-file=configuration/packer-variables.json \
+-var 'folder=<esx1-dedicated|esx2-dedicated>' \
+-var 'ipaddr=<192.168.16.23|192.168.16.49>/24' \
 packer-scripts/dhcp/dhcp.json
 ```
+
+packer build \
+-var 'dominance=master' \
+-var 'pool=192.168.16.5 Dedicated' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=esx1-dedicated' \
+-var 'ipaddr=192.168.16.23/24' \
+packer-scripts/dhcp/dhcp.json
 
 BACKUP
 
 ```
-scp -r user@192.168.16.4:/etc/pihole/* configuration/ds-pi-hole/etc/pihole/
+scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
 ```
+
+scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-<master|backup>/etc/dhcp/
 
 ### level0 Ubuntu 16.04
 
