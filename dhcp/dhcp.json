@@ -7,10 +7,12 @@
       "password": "{{user `vcenter_password`}}",
       "insecure_connection": "true",
       "datacenter": "{{user `vcenter_datacenter`}}",
-      "resource_pool": "{{user `vcenter_resource_pool_deployed`}}",
+      "resource_pool": "{{user `pool`}}",
 
       "template": "templates/ubuntu-16.04-template",
+      "CPUs": 1,
       "vm_name": "{{user `name-dhcp-server`}}{{user `dominance`}}",
+      "folder": "{{user `folder`}}",
       "cluster": "{{user `vcenter_cluster`}}",
       "host": "{{user `vcenter_host`}}",
       "datastore": "{{user `vcenter_datastore`}}",
@@ -27,7 +29,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "configuration/{{user `name-dhcp-server`}}{{user `dominance`}}/etc/network/interfaces",
+      "source": "{{user `packer-support-folder`}}/etc/NetworkManager/NetworkManager.conf",
       "destination": "/home/user/"
     },
     {
@@ -37,12 +39,12 @@
     },
     {
       "type": "shell",
-      "script": "packer-scripts/dhcp/dhcp-network-setup.sh",
+      "script": "packer-scripts/dhcp/dhcp-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "script": "packer-scripts/dhcp/dhcp-setup.sh",
+      "script": "packer-scripts/dhcp/dhcp-network-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
