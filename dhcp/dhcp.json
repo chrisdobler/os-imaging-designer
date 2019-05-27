@@ -39,13 +39,13 @@
     },
     {
       "type": "shell",
-      "script": "packer-scripts/dhcp/dhcp-setup.sh",
+      "environment_vars": ["IPADDR={{user `ipaddr`}}"],
+      "script": "packer-scripts/dhcp/dhcp-network-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "environment_vars": ["IPADDR={{user `ipaddr`}}"],
-      "script": "packer-scripts/dhcp/dhcp-network-setup.sh",
+      "script": "packer-scripts/dhcp/dhcp-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
