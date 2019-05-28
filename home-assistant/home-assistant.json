@@ -1,0 +1,56 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-clone",
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "insecure_connection": "true",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+      "resource_pool": "{{user `pool`}}",
+
+      "template": "templates/ubuntu-16.04-template",
+      "CPUs": 4,
+      "vm_name": "{{user `vm_name`}}",
+      "folder": "{{user `folder`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter _host`}}",
+      "datastore": "{{user `vcenter_datastore`}}",
+      "shutdown_command": "echo {{user `ubuntu_template_password`}} | sudo -S shutdown -P now",
+
+      "communicator": "ssh",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+
+      "convert_to_template": false,
+      "create_snapshot": false
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "expect_disconnect": true,
+      "environment_vars": ["IPADDR={{user `ipaddr`}}"],
+      "script": "packer-scripts/utilities/ubuntu-16.04-use-nmcli.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "packer-scripts/home-assistant/home-assistant-setup.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "configuration/ds-home-assistant1/usr/share/hassio",
+      "destination": "/home/user/"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "echo '{{user `ubuntu_template_password`}}' | sudo -S rsync -a /home/user/hassio/* /usr/share/hassio",
+        "rm -rf /home/user/hassio"
+      ]
+    }
+  ]
+}

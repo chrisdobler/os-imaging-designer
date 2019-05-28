@@ -4,7 +4,9 @@ A set of packer scripts with generalized configuration logic for deploying vario
 
 ## Description
 
-The purpose of this project is to extract out as much of the build script code as possible into a shareable set of generalized build script templates for a variety of different operating systems ranging from Linux to Windows and even Mac OS. Embedded applications are planned as well.
+\*\*\* This is a work in progress. Some of the core features are still being worked on.
+
+The purpose of this project is to extract out as much of the build script code as possible into a shareable set of generalized build script templates for a variety of different operating systems ranging from Linux to Windows and even Mac OS. Embedded applications are planned as well. The next step is to divide the scripts into fragments which can be dynamically created using a design schema. the files in the 'packer-scripts' directory reresent configured script renderings. These will eventually be removed in favor of dynamically created scripts. Then the files in this directory would represent temporary configs that can be used for debugging imaging issues.
 
 These scripts use the packer build script utility, by Hashicorp - https://www.packer.io.
 
@@ -16,13 +18,13 @@ Ideally you run these scripts from one level up from you working directory so th
 
 ```
 /.
-| packer-scripts/<machine types>
+| packer-scripts/<rendered machine types>
 | private-config/<your personal configs>
 ```
 
 ## Supported platforms
 
-This is a lits of all the application servers which are currently supported, and what their level of support is currently at.
+This is a lits of all the application servers which are currently supported, and what their level of support is currently at. The hardcoded values will be phased out soon.
 
 #### Pi Hole Server
 
@@ -52,7 +54,7 @@ An ubuntu dhcp server with a failover peer for redundancy. Use the 'dominance' f
 support:
 
 - Build - OK
-- Backups - In progress
+- Backups - OK
 
 BUILD
 
@@ -74,13 +76,54 @@ packer build \
 -var 'ipaddr=192.168.16.23/24' \
 packer-scripts/dhcp/dhcp.json
 
+packer build \
+-var 'dominance=backup' \
+-var 'pool=192.168.16.6 Dedicated' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=esx2-dedicated' \
+-var 'ipaddr=192.168.16.49/24' \
+packer-scripts/dhcp/dhcp.json
+
 BACKUP
 
 ```
 scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
 ```
 
-scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-<master|backup>/etc/dhcp/
+scp -r user@ds-dhcp-master:/etc/dhcp/\* configuration/ds-dhcp-master/etc/dhcp/
+
+scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-backup/etc/dhcp/
+
+#### Home Asssistant
+
+reference: https://www.home-assistant.io/
+
+support:
+
+- Build - OK
+- Backups - OK
+
+BUILD
+
+```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'ipaddr=192.168.16.48/24' \
+packer-scripts/home-assistant/home-assistant.json
+```
+
+BACKUP
+
+```
+scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
+```
+
+`packer build -var-file=machines/packer-variables.json machines/ds-home-assistant1/ds-home-assistant1.json`
+
+1. backup home assistant
+   `scp -r user@192.168.16.48:/usr/share/hassio/* machines/ds-home-assistant1/usr/share/hassio/`
 
 ### level0 Ubuntu 16.04
 
@@ -89,3 +132,4 @@ This is a base build script to install the operating system and perform as much 
 - Starts with iso/netboot install
 - Installs recommended baseline sotware
 - Updates system
+- todo: remove splash screen
