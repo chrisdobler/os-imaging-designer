@@ -39,6 +39,7 @@
     },
     {
       "type": "shell",
+      "expect_disconnect": true,
       "environment_vars": ["IPADDR={{user `ipaddr`}}"],
       "script": "packer-scripts/dhcp/dhcp-network-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
