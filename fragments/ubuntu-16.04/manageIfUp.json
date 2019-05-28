@@ -1,0 +1,5 @@
+{
+  "type": "file",
+  "source": "{{user `packer-support-folder`}}/etc/NetworkManager/NetworkManager.conf",
+  "destination": "/home/user/"
+}

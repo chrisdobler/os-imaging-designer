@@ -29,11 +29,6 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "{{user `packer-support-folder`}}/etc/NetworkManager/NetworkManager.conf",
-      "destination": "/home/user/"
-    },
-    {
-      "type": "file",
       "source": "configuration/{{user `name-dhcp-server`}}{{user `dominance`}}/etc/dhcp",
       "destination": "/home/user"
     },
