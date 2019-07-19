@@ -88,6 +88,8 @@ BACKUP
 
 ```
 scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
+// todo: backup sqlite
+
 ```
 
 scp -r user@ds-dhcp-master:/etc/dhcp/\* configuration/ds-dhcp-master/etc/dhcp/
@@ -101,7 +103,7 @@ reference: https://www.home-assistant.io/
 support:
 
 - Build - OK
-- Backups - OK
+- Backups - In progress
 
 BUILD
 
@@ -110,6 +112,7 @@ packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \
 -var 'folder=automated' \
+-var 'vm_name=ds-home-assistant1' \
 -var 'ipaddr=192.168.16.48/24' \
 packer-scripts/home-assistant/home-assistant.json
 ```
@@ -117,13 +120,10 @@ packer-scripts/home-assistant/home-assistant.json
 BACKUP
 
 ```
-scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
+echo '.backup haBackup.db'  | sqlite3 /usr/share/hassio/homeassistant/home-assistant_v2.db
+scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
+scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
 ```
-
-`packer build -var-file=machines/packer-variables.json machines/ds-home-assistant1/ds-home-assistant1.json`
-
-1. backup home assistant
-   `scp -r user@192.168.16.48:/usr/share/hassio/* machines/ds-home-assistant1/usr/share/hassio/`
 
 ### level0 Ubuntu 16.04
 
