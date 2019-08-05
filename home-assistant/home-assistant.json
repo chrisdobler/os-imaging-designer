@@ -36,11 +36,6 @@
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     },
     {
-      "type": "shell",
-      "script": "packer-scripts/home-assistant/home-assistant-setup.sh",
-      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
       "type": "file",
       "source": "configuration/ds-home-assistant1/usr/share/hassio",
       "destination": "/home/user/"
@@ -48,9 +43,15 @@
     {
       "type": "shell",
       "inline": [
+        "echo '{{user `ubuntu_template_password`}}' | sudo -S mkdir /usr/share/hassio",
         "echo '{{user `ubuntu_template_password`}}' | sudo -S rsync -a /home/user/hassio/* /usr/share/hassio",
         "rm -rf /home/user/hassio"
       ]
+    },
+    {
+      "type": "shell",
+      "script": "packer-scripts/home-assistant/home-assistant-setup.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
 }

@@ -1,5 +1,7 @@
 rm /var/lib/dpkg/lock
 
+apt-get upgrade
+
 apt-get install -y software-properties-common
 
 add-apt-repository universe

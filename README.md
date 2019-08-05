@@ -121,7 +121,7 @@ BACKUP
 
 ```
 echo '.backup haBackup.db'  | sqlite3 /usr/share/hassio/homeassistant/home-assistant_v2.db
-scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
+scp -r user@ds-home-assistant1:/home/user/haBackup.db configuration/ds-home-assistant1/usr/share/hassio/homeassistant/home-assistant_v2.db
 scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
 ```
 
