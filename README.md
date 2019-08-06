@@ -12,7 +12,7 @@ These scripts use the packer build script utility, by Hashicorp - https://www.pa
 
 The deployment at this point is somewhat biased toward the VMware vSphere hypervisor platform https://www.vmware.com/products/vsphere.html. Its also planned to move away from this and make the deployment more agnostic so that the majority of the script logic can be applied to any deployment platform.
 
-The trickiest part of this project is how to decide to properly draw a distinction between private configuration and public coniguration for a machine build script. Contributions are very appreciated for methods and ways to extract more of the generalized logic out of the 'private' coniguration files and in to here.
+The trickiest part of this project is how to decide to properly draw a distinction between private configuration and public coniguration for a machine build script. Contributions are very appreciated for methods and ways to extract more of the generalized logic out of the 'private' configuration files and in to here.
 
 Ideally you run these scripts from one level up from you working directory so that you can relatively reference private scripts.
 
@@ -124,6 +124,7 @@ packer build \
 -var 'folder=automated' \
 -var 'vm_name=ds-fog1' \
 -var 'ipaddr=192.168.16.44/24' \
+-var 'ipaddr2=10.0.0.44/24' \
 packer-scripts/fog/fog.json
 ```
 
