@@ -22,6 +22,16 @@ Ideally you run these scripts from one level up from you working directory so th
 | private-config/<your personal configs>
 ```
 
+## Prepare Local Environment
+
+see: https://github.com/vmware/govmomi/releases
+
+```
+% export URL_TO_BINARY=https://*
+% curl -L $URL_TO_BINARY | gunzip > /usr/local/bin/govc
+% chmod +x /usr/local/bin/govc
+```
+
 ## Supported platforms
 
 This is a lits of all the application servers which are currently supported, and what their level of support is currently at. The hardcoded values will be phased out soon.
@@ -96,13 +106,34 @@ scp -r user@ds-dhcp-master:/etc/dhcp/\* configuration/ds-dhcp-master/etc/dhcp/
 
 scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-backup/etc/dhcp/
 
+#### Fog Server
+
+reference: https://fogproject.org/
+
+support:
+
+- Build - In progress
+- Backups - In progress
+
+BUILD
+
+```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=ds-fog1' \
+-var 'ipaddr=192.168.16.44/24' \
+packer-scripts/fog/fog.json
+```
+
 #### Home Asssistant
 
 reference: https://www.home-assistant.io/
 
 support:
 
-- Build - OK
+- Build - In progress
 - Backups - In progress
 
 BUILD
