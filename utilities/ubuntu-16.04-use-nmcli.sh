@@ -11,7 +11,7 @@ sudo sed -i '10,12d' /etc/network/interfaces > /etc/network/interfaces
 sudo systemctl enable NetworkManager.service
 sudo systemctl start NetworkManager.service
 
-sudo nmcli con add type ethernet1 con-name ethernet ifname ens192
+sudo nmcli con add type ethernet con-name "ethernet1" ifname ens192
 
 # sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 
