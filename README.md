@@ -106,14 +106,23 @@ scp -r user@ds-dhcp-master:/etc/dhcp/\* configuration/ds-dhcp-master/etc/dhcp/
 
 scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-backup/etc/dhcp/
 
+UPDATE SETTINGS
+
+```
+scp -r configuration/ds-dhcp-master/etc/dhcp/ user@ds-dhcp-master:~
+export PASS=<password>
+echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/"'
+echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"service isc-dhcp-server restart"'
+```
+
 #### Fog Server
 
 reference: https://fogproject.org/
 
 support:
 
-- Build - In progress
-- Backups - In progress
+- Build - OK *does sql restore?
+- Backups - OK
 
 BUILD
 
@@ -126,6 +135,13 @@ packer build \
 -var 'ipaddr=192.168.16.44/24' \
 -var 'ipaddr2=10.0.0.44/24' \
 packer-scripts/fog/fog.json
+```
+
+BACKUP
+
+```
+sudo mysqldump -B fog > ~/fogdb.sql
+scp -r user@192.168.16.152:~/fogdb.sql configuration/ds-fog1/
 ```
 
 #### Home Asssistant
