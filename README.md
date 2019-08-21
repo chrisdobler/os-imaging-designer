@@ -111,8 +111,8 @@ UPDATE SETTINGS
 ```
 scp -r configuration/ds-dhcp-master/etc/dhcp/ user@ds-dhcp-master:~
 export PASS=<password>
-echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/"'
-echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"service isc-dhcp-server restart"'
+echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/ && service isc-dhcp-server restart && service isc-dhcp-server status"'
+
 ```
 
 #### Fog Server
@@ -121,12 +121,21 @@ reference: https://fogproject.org/
 
 support:
 
-- Build - OK *does sql restore?
+- Build - OK \*does sql restore?
 - Backups - OK
 
 BUILD
 
 ```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=ds-fog1' \
+-var 'ipaddr=192.168.16.44/24' \
+-var 'ipaddr2=10.0.0.44/24' \
+packer-scripts/fog/fog-network.json
+
 packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \

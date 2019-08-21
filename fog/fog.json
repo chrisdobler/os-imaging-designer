@@ -9,7 +9,7 @@
       "datacenter": "{{user `vcenter_datacenter`}}",
       "resource_pool": "{{user `pool`}}",
 
-      "template": "templates/ubuntu-16.04-template",
+      "template": "automated/{{user `vm_name`}}-networkprep",
       "CPUs": 4,
       "vm_name": "{{user `vm_name`}}",
       "folder": "{{user `folder`}}",
@@ -29,33 +29,8 @@
 
   "provisioners": [
     {
-      "type": "shell-local",
-      "command": "export GOVC_PASSWORD={{ user `vcenter_password` }}"
-    },
-    {
-      "type": "shell-local",
-      "command": "export GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
-    },
-    {
-      "type": "shell-local",
-      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{ user `vm_name` }}' -net '{{ user `vm_portgroup2` }}' -net.adapter vmxnet3"
-    },
-    {
       "type": "shell",
-      "inline": ["mkdir /home/user/transfer"]
-    },
-    {
-      "type": "file",
-      "source": "configuration/ds-fog1/",
-      "destination": "/home/user/transfer"
-    },
-    {
-      "type": "shell",
-      "script": "packer-scripts/fog/fog-network-setup.sh",
-      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
+      "expect_disconnect": true,
       "script": "packer-scripts/fog/fog-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }

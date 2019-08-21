@@ -7,13 +7,16 @@
       "password": "{{user `vcenter_password`}}",
       "insecure_connection": "true",
       "datacenter": "{{user `vcenter_datacenter`}}",
-      "resource_pool": "{{user `vcenter_resource_pool_deployed`}}",
+      "resource_pool": "{{user `pool`}}",
 
       "template": "templates/ubuntu-16.04-template",
-      "vm_name": "{{user `name-ds-pi-hole`}}",
+      "CPUs": 4,
+      "vm_name": "{{user `vm_name`}}-networkprep",
+      "folder": "{{user `folder`}}",
       "cluster": "{{user `vcenter_cluster`}}",
       "host": "{{user `vcenter_host`}}",
       "datastore": "{{user `vcenter_datastore`}}",
+      "shutdown_command": "echo {{user `ubuntu_template_password`}} | sudo -S shutdown -P now",
 
       "communicator": "ssh",
       "ssh_username": "{{user `ssh_username`}}",
@@ -26,23 +29,26 @@
 
   "provisioners": [
     {
-      "type": "file",
-      "source": "configuration/ds-pi-hole/etc/network/interfaces",
-      "destination": "/home/user/"
-    },
-    {
-      "type": "file",
-      "source": "configuration/ds-pi-hole/etc/pihole",
-      "destination": "/home/user"
-    },
-    {
-      "type": "shell",
-      "script": "packer-scripts/pi-hole/pi-hole-network-setup.sh",
-      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{ user `vm_name` }}-networkprep' -net '{{ user `vm_portgroup2` }}' -net.adapter vmxnet3"
     },
     {
       "type": "shell",
-      "script": "packer-scripts/pi-hole/pi-hole-setup.sh",
+      "inline": ["mkdir /home/user/transfer"]
+    },
+    {
+      "type": "file",
+      "source": "configuration/ds-fog1/",
+      "destination": "/home/user/transfer"
+    },
+    {
+      "type": "shell",
+      "expect_disconnect": true,
+      "script": "packer-scripts/fog/fog-network-setup.sh",
       "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
