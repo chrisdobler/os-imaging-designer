@@ -12,6 +12,3 @@ cd bin
 sudo ./installfog.sh -y
 
 sudo apt-get install -f -y
-
-# restore backup
-sudo mysql fog < /home/user/transfer/fogdb.sql

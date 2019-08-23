@@ -11,7 +11,7 @@
 
       "template": "automated/{{user `vm_name`}}-networkprep",
       "CPUs": 4,
-      "vm_name": "{{user `vm_name`}}",
+      "vm_name": "{{user `vm_name`}}-adapter-ready",
       "folder": "{{user `folder`}}",
       "cluster": "{{user `vcenter_cluster`}}",
       "host": "{{user `vcenter_host`}}",
@@ -22,7 +22,7 @@
       "ssh_username": "{{user `ssh_username`}}",
       "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
 
-      "convert_to_template": false,
+      "convert_to_template": true,
       "create_snapshot": false
     }
   ],
