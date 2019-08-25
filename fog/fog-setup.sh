@@ -12,3 +12,7 @@ cd bin
 sudo ./installfog.sh -y
 
 sudo apt-get install -f -y
+
+# setup parted magic
+mkdir /var/www/html/pmagic/
+sudo cp -r var/www/html/pmagic/* /var/www/html/pmagic
