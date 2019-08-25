@@ -115,13 +115,47 @@ echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/ &
 
 ```
 
+#### Open vSwitch
+
+reference: http://www.openvswitch.org/
+
+This example also integrates together with Fog Server to finalize the deployment into a bare metal box.
+
+support:
+
+- Build - In progress
+- Backups - In progress
+
+BUILD
+
+```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=ds-sw02' \
+-var 'ipaddr=192.168.16.54/24' \
+packer-scripts/open-vswitch/open-vswitch.json
+
+scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx user@ds-sw02:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/
+
+export PASS=<password>
+ssh root:$PASS@192.168.16.5
+```
+
+ADJUST VM TEMPLATE
+
+```
+user@ds-sw02:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/ds-sw02-fog-source.vmx
+```
+
 #### Fog Server
 
 reference: https://fogproject.org/
 
 support:
 
-- Build - OK \*does sql restore?
+- Build - OK
 - Backups - OK
 
 BUILD
@@ -144,13 +178,23 @@ packer build \
 -var 'ipaddr=192.168.16.44/24' \
 -var 'ipaddr2=10.0.0.44/24' \
 packer-scripts/fog/fog.json
+
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=ds-fog1' \
+-var 'ipaddr=192.168.16.44/24' \
+-var 'ipaddr2=10.0.0.44/24' \
+packer-scripts/fog/fog-network-add-adapter.json
 ```
 
 BACKUP
 
 ```
-sudo mysqldump -B fog > ~/fogdb.sql
-scp -r user@192.168.16.152:~/fogdb.sql configuration/ds-fog1/
+export PASS=<password>
+echo $PASS | ssh user@ds-fog1 sudo -S sh -c '"sudo mysqldump -B fog > ~/fogdb.sql && ls -la ~"'
+scp -r user@ds-fog1:~/fogdb.sql configuration/ds-fog1/
 ```
 
 #### Home Asssistant

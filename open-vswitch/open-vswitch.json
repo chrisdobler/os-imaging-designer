@@ -1,0 +1,52 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-clone",
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "insecure_connection": "true",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+      "resource_pool": "{{user `pool`}}",
+
+      "template": "templates/ubuntu-16.04-template",
+      "CPUs": 1,
+      "vm_name": "{{user `vm_name`}}-fog-source",
+      "folder": "{{user `folder`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datastore": "{{user `vcenter_datastore`}}",
+
+      "communicator": "ssh",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+
+      "convert_to_template": false,
+      "create_snapshot": false
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "expect_disconnect": true,
+      "environment_vars": ["IPADDR={{user `ipaddr`}}"],
+      "script": "packer-scripts/utilities/ubuntu-16.04-use-nmcli.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "inline": ["mkdir /home/user/transfer"]
+    },
+    {
+      "type": "file",
+      "source": "configuration/{{user `vm_name`}}/",
+      "destination": "/home/user/transfer"
+    },
+    {
+      "type": "shell",
+      "script": "packer-scripts/open-vswitch/open-vswitch-setup.sh",
+      "execute_command": "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    }
+  ]
+}
