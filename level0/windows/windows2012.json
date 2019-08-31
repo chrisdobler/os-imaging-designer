@@ -1,0 +1,49 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "insecure_connection": "true",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+
+      "vm_name": "{{user `vm_name`}}-template",
+      "folder": "{{user `folder`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datastore": "{{user `vcenter_datastore`}}",
+
+      "guest_os_type": "windows9_64Guest",
+
+      "communicator": "winrm",
+      "winrm_username": "{{user `windows_template_user`}}",
+      "winrm_password": "{{user `windows_template_password`}}",
+
+      "CPUs": 4,
+      "RAM": 4096,
+      "RAM_reserve_all": false,
+
+      "disk_controller_type": "pvscsi",
+      "disk_size": 32768,
+      "disk_thin_provisioned": true,
+
+      "network_card": "vmxnet3",
+      "network": "Public LAN",
+
+      "convert_to_template": true,
+      "create_snapshot": false,
+
+      "iso_paths": [
+        "[Installations] PC/Microsoft/MICROSOFT.WINDOWS.SERVER.2012.R2.ESSENTIALS.RTM.X64.ENGLISH.DVD-WZT/9600.16384.130821-1623_x64fre_Server_Solution_EN-US_IRM_SSSO_DV5.iso"
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "windows-shell",
+      "inline": ["dir c:\\"]
+    }
+  ]
+}
