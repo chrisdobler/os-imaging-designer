@@ -7,9 +7,9 @@
 
         <component name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DriverPaths>
-                <PathAndCredentials wcm:action="add" wcm:keyValue="A">
+                <PathAndCredentials wcm:action="add" wcm:keyValue="E">
                     <!-- pvscsi-Windows8.flp -->
-                    <Path>B:\</Path>
+                    <Path>E:\</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
@@ -17,20 +17,17 @@
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserData>
                 <AcceptEula>true</AcceptEula>
-
-                <!-- Retail image requires a key
                 <ProductKey>
-                    <Key>XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</Key>
+                    <Key>326N4-6GMBX-PD2QT-M7HX4-TVHM8</Key>
                 </ProductKey>
-                -->
             </UserData>
 
             <ImageInstall>
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/NAME</Key>
-                            <Value>Windows 10 Pro</Value>
+                            <Key>/IMAGE/INDEX</Key>
+                            <Value>1</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallToAvailablePartition>true</InstallToAvailablePartition>
@@ -87,17 +84,11 @@
             <TimeZone>Russian Standard Time</TimeZone>
             -->
 
-            <UserAccounts>
-                <LocalAccounts>
-                    <LocalAccount wcm:action="add">
-                        <Name>user</Name>
-                        <Password>
-                            <Value>G4tHmkMmc</Value>
-                            <PlainText>true</PlainText>
-                        </Password>
-                        <Group>Administrators</Group>
-                    </LocalAccount>
-                </LocalAccounts>
+            <UserAccounts>=
+                <AdministratorPassword>
+                    <Value>G4tHmkMmc</Value>
+                    <PlainText>false</PlainText>
+                </AdministratorPassword>
             </UserAccounts>
 
             <AutoLogon>
@@ -105,9 +96,9 @@
                 <Username>user</Username>
                 <Password>
                     <Value>G4tHmkMmc</Value>
-                    <PlainText>true</PlainText>
+                    <PlainText>false</PlainText>
                 </Password>
-                <LogonCount>1</LogonCount>
+                <LogonCount>2</LogonCount>
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">

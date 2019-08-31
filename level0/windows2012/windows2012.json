@@ -35,8 +35,11 @@
       "create_snapshot": false,
 
       "iso_paths": [
-        "[Installations] PC/Microsoft/Windows2012/Windows2012R2.iso"
-      ]
+        "[Installations] PC/Microsoft/Windows2012/Windows2012R2.iso",
+        "[Installations] PC/Microsoft/Windows2012/vm-tools.iso"
+      ],
+
+      "floppy_files": ["{{user `window2012_scripts_folder`}}/setup/"]
     }
   ],
 
