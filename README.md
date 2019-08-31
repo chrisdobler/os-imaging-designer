@@ -137,16 +137,19 @@ packer build \
 -var 'ipaddr=192.168.16.54/24' \
 packer-scripts/open-vswitch/open-vswitch.json
 
-scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx user@ds-sw02:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/
+export MATREMPASS=<password>
+sshpass -p $MATREMPASS scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx root@192.168.16.5:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/
 
-export PASS=<password>
-ssh root:$PASS@192.168.16.5
+# enable an image from fog
+
+# boot machine
+
 ```
 
 ADJUST VM TEMPLATE
 
 ```
-user@ds-sw02:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/ds-sw02-fog-source.vmx
+scp -r root@192.168.16.5:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/ds-sw02-fog-source.vmx configuration/ds-sw02/
 ```
 
 #### Fog Server
@@ -234,3 +237,14 @@ This is a base build script to install the operating system and perform as much 
 - Installs recommended baseline sotware
 - Updates system
 - todo: remove splash screen
+
+### level0 Windows 2012
+
+```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=windows-2012' \
+packer-scripts/level0/windows/windows2012.json
+```

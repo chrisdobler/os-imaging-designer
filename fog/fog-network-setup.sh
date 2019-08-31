@@ -4,3 +4,5 @@ echo "
 # 10.0.0.32:/mnt/storage-array-1/storage09/Images/fog       /images nfs     nfsvers=3,defaults,noatime 0 0
 # 10.0.0.32:/mnt/storage-array-1/storage09/Images/fog/dev /images/dev nfs     nfsvers=3,defaults,noatime 0 0
 " >> /etc/fstab
+
+sudo cp -r ~/transfer/etc/network/interfaces /etc/network/interfaces
