@@ -35,7 +35,7 @@
       "create_snapshot": false,
 
       "iso_paths": [
-        "[Installations] PC/Microsoft/MICROSOFT.WINDOWS.SERVER.2012.R2.ESSENTIALS.RTM.X64.ENGLISH.DVD-WZT/9600.16384.130821-1623_x64fre_Server_Solution_EN-US_IRM_SSSO_DV5.iso"
+        "[Installations] PC/Microsoft/Windows2012/Windows2012R2.iso"
       ]
     }
   ],
