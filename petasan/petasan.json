@@ -1,0 +1,76 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "insecure_connection": "true",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+      "resource_pool": "{{user `pool`}}",
+
+      "vm_name": "{{user `name-iscsi-cluster`}}-{{user `member`}}",
+      "folder": "{{user `folder`}}",
+      "vm_version": 11,
+      "cpu_cores": 4,
+      "cpus": 4,
+      "ram": "4000",
+      "network": "Public LAN",
+      "network_card": "vmxnet3",
+      "guest_os_type": "ubuntu64Guest",
+      "datastore": "{{user `vcenter_datastore`}}",
+      "iso_paths": "[Installations] images/petasan-2.3.1.1.iso",
+      "shutdown_command": "",
+
+      "disk_controller_type": "pvscsi",
+      "disk_size": 67000,
+      "disk_thin_provisioned": true,
+
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+
+      "communicator": "none",
+      "create_snapshot": false,
+      "convert_to_template": false,
+
+      "boot_command": []
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{user `name-iscsi-cluster`}}-{{user `member`}}' -net '{{ user `vm_portgroup8` }}' -net.adapter vmxnet3"
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{user `name-iscsi-cluster`}}-{{user `member`}}' -net '{{ user `vm_portgroup9` }}' -net.adapter vmxnet3"
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{user `name-iscsi-cluster`}}-{{user `member`}}' -net '{{ user `vm_portgroup10` }}' -net.adapter vmxnet3"
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{user `name-iscsi-cluster`}}-{{user `member`}}' -net '{{ user `vm_portgroup11` }}' -net.adapter vmxnet3"
+    }
+  ]
+}

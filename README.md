@@ -229,6 +229,66 @@ scp -r user@ds-home-assistant1:/home/user/haBackup.db configuration/ds-home-assi
 scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
 ```
 
+### Starwind vSAN
+
+reference:
+
+support:
+
+- Build - in progress
+- Backups - in progress
+
+BUILD
+
+```
+packer build \
+-var 'vm_name=DSs014-starwind|DSs015-starwind' \
+-var 'dominance=<master|backup>' \
+-var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=<esx1-dedicated|esx2-dedicated>' \
+-var 'ipaddr=<192.168.16.56|192.168.16.57>/24' \
+packer-scripts/starwind-san/starwind-san.json
+
+packer build \
+-var 'vm_name=DSs014-starwind' \
+-var 'dominance=master' \
+-var 'pool=192.168.16.5 Dedicated' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=esx1-dedicated' \
+-var 'ipaddr=192.168.16.56/24' \
+packer-scripts/starwind-san/starwind-san.json
+```
+
+### PetaSAN
+
+reference: http://www.petasan.org/
+
+support:
+
+- Build - in progress
+- Backups - in progress
+
+BUILD
+
+```
+packer build \
+-var 'member=active|backup|witness' \
+-var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=<esx1-dedicated|esx2-dedicated>' \
+-var 'ipaddr=<192.168.16.56|192.168.16.57>/24' \
+packer-scripts/petasan/petasan.json
+
+packer build \
+-var 'member=active' \
+-var 'pool=192.168.16.5 Dedicated' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=esx1-dedicated' \
+-var 'ipaddr=192.168.16.56/24' \
+packer-scripts/petasan/petasan.json
+```
+
 ### level0 Ubuntu 16.04
 
 This is a base build script to install the operating system and perform as much shared config as possible before passing up to a specific builder.
@@ -246,5 +306,6 @@ packer build \
 -var-file=configuration/packer-variables.json \
 -var 'folder=automated' \
 -var 'vm_name=windows-2012' \
-packer-scripts/level0/windows/windows2012.json
+-var 'window2012_scripts_folder=packer-scripts/level0/windows2012' \
+packer-scripts/level0/windows2012/windows2012.json
 ```
