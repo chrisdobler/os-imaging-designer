@@ -115,6 +115,12 @@ echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/ &
 
 ```
 
+GET MACHINE IP
+
+```
+ssh user@ds-dhcp-master cat /var/lib/dhcp/dhcpd.leases
+```
+
 #### Open vSwitch
 
 reference: http://www.openvswitch.org/
@@ -198,6 +204,14 @@ BACKUP
 export PASS=<password>
 echo $PASS | ssh user@ds-fog1 sudo -S sh -c '"sudo mysqldump -B fog > ~/fogdb.sql && ls -la ~"'
 scp -r user@ds-fog1:~/fogdb.sql configuration/ds-fog1/
+```
+
+UPDATE
+
+```
+scp -r configuration/ds-fog1 user@ds-fog1:/home/user/transfer
+echo $PASS | ssh user@ds-fog1 sudo -S sh -c '"cp -r transfer/var/www/html /var/www/"'
+
 ```
 
 #### Home Asssistant
@@ -308,4 +322,25 @@ packer build \
 -var 'vm_name=windows-2012' \
 -var 'window2012_scripts_folder=packer-scripts/level0/windows2012' \
 packer-scripts/level0/windows2012/windows2012.json
+```
+
+### ZFS Replicate
+
+restore:
+
+```
+scp -r /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin/zfs-replicate root@ds-freenas2:/root/bin/
+```
+
+backup settings:
+
+```
+scp -r root@ds-freenas2:/root/bin/zfs-replicate/ /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin
+```
+
+monitor:
+
+```
+ls -latr /root/bin/zfs-replicate/logs/
+find . -name "*.log" | xargs tail -f
 ```
