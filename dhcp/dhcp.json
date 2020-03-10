@@ -30,7 +30,7 @@
     {
       "type": "file",
       "source": "configuration/{{user `name-dhcp-server`}}{{user `dominance`}}/etc/dhcp",
-      "destination": "/home/user"
+      "destination": "/home/user/transfer"
     },
     {
       "type": "shell",
