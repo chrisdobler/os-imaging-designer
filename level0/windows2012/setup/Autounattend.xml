@@ -80,14 +80,12 @@
                 <ProtectYourPC>3</ProtectYourPC>
             </OOBE>
 
-            <!--
-            <TimeZone>Russian Standard Time</TimeZone>
-            -->
+            <TimeZone>Pacific Standard Time</TimeZone>
 
             <UserAccounts>=
                 <AdministratorPassword>
                     <Value>G4tHmkMmc</Value>
-                    <PlainText>false</PlainText>
+                    <PlainText>true</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
 
@@ -96,7 +94,7 @@
                 <Username>user</Username>
                 <Password>
                     <Value>G4tHmkMmc</Value>
-                    <PlainText>false</PlainText>
+                    <PlainText>true</PlainText>
                 </Password>
                 <LogonCount>2</LogonCount>
             </AutoLogon>

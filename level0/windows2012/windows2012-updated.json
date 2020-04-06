@@ -1,0 +1,59 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-clone",
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "insecure_connection": "true",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+      "template": "automated/{{user `windows_template`}}",
+
+      "vm_name": "automated/{{user `windows_template`}}-updated",
+      "folder": "{{user `folder`}}",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datastore": "{{user `vcenter_datastore`}}",
+
+      "communicator": "winrm",
+      "winrm_username": "{{user `windows_template_user`}}",
+      "winrm_password": "{{user `windows_template_password`}}",
+
+      "CPUs": 4,
+      "RAM": 4096,
+      "RAM_reserve_all": false,
+
+      "convert_to_template": true,
+      "create_snapshot": false
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "powershell",
+      "environment_vars": "WINRMPASS={{.WinRMPassword}}",
+      "script": "packer-scripts/utilities/windows/enableTSConnections.ps1"
+    },
+    {
+      
+    }
+    {
+      "type": "file",
+      "source": "packer-scripts/utilities/downloadFile.bat",
+      "destination": "C:\\Users\\Administrator\\Transfer"
+    },
+    {
+      // run the file to download the stuff and run the executable
+    },
+
+    // remove this
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc device.cdrom.insert -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{ user `vm_name` }}'"
+    }
+  ]
+}
