@@ -303,27 +303,6 @@ packer build \
 packer-scripts/petasan/petasan.json
 ```
 
-### level0 Ubuntu 16.04
-
-This is a base build script to install the operating system and perform as much shared config as possible before passing up to a specific builder.
-
-- Starts with iso/netboot install
-- Installs recommended baseline sotware
-- Updates system
-- todo: remove splash screen
-
-### level0 Windows 2012
-
-```
-packer build \
--var 'pool=Automated Machines' \
--var-file=configuration/packer-variables.json \
--var 'folder=automated' \
--var 'vm_name=windows-2012' \
--var 'window2012_scripts_folder=packer-scripts/level0/windows2012' \
-packer-scripts/level0/windows2012/windows2012.json
-```
-
 ### ZFS Replicate
 
 restore:
@@ -343,4 +322,48 @@ monitor:
 ```
 ls -latr /root/bin/zfs-replicate/logs/
 find . -name "*.log" | xargs tail -f
+```
+
+manually start replicator:
+
+```
+/root/bin/zfs-replicate/zfs-replicate.sh /root/bin/zfs-replicate/config.sh
+
+/root/bin/zfs-replicate/copy-operation/zfs-replicate.sh /root/bin/zfs-replicate/copy-operation/config.sh
+```
+
+### Ubiquiti Unifi Network Controller
+
+reference: https://www.ui.com/download/unifi/
+
+support:
+
+- Build - in progress
+- Backups - in progress
+
+BUILD
+
+```
+
+```
+
+### level0 Ubuntu 16.04
+
+This is a base build script to install the operating system and perform as much shared config as possible before passing up to a specific builder.
+
+- Starts with iso/netboot install
+- Installs recommended baseline sotware
+- Updates system
+- todo: remove splash screen
+
+### level0 Windows 2012
+
+```
+packer build \
+-var 'pool=Automated Machines' \
+-var-file=configuration/packer-variables.json \
+-var 'folder=automated' \
+-var 'vm_name=windows-2012' \
+-var 'window2012_scripts_folder=packer-scripts/level0/windows2012' \
+packer-scripts/level0/windows2012/windows2012.json
 ```
