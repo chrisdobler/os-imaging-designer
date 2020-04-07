@@ -3,20 +3,20 @@
     {
       "type": "vsphere-iso",
 
-      "vcenter_server":      "vcenter.vsphere65.test",
-      "username":            "root",
-      "password":            "jetbrains",
+      "vcenter_server": "vcenter.vsphere65.test",
+      "username": "root",
+      "password": "jetbrains",
       "insecure_connection": "true",
 
       "vm_name": "macos-packer",
-      "host":     "esxi-mac.vsphere65.test",
+      "host": "esxi-mac.vsphere65.test",
 
       "guest_os_type": "darwin16_64Guest",
 
-      "CPUs":             1,
-      "RAM":              4096,
+      "CPUs": 1,
+      "RAM": 4096,
 
-      "disk_size":        32768,
+      "disk_size": 32768,
       "disk_thin_provisioned": true,
 
       "network_card": "e1000e",
