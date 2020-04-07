@@ -1,6 +1,7 @@
 import fusion from './packer/builders/fusion';
 import { spawnSync as spawn } from 'child_process';
 import fs from 'fs';
+import prettier from 'prettier';
 
 // packer build \
 // -var 'pool=Automated Machines' \
@@ -24,25 +25,30 @@ const packer = async () => {
     fs.mkdirSync(dir);
   }
 
-  await fs.writeFile(`${dir}${configFile}`, 'Hello content!', function (err) {
-    if (err) throw err;
-    console.log('Saved!');
-  });
+  await fs.writeFile(
+    `${dir}${configFile}`,
+    prettier.format(JSON.stringify(fusion()), { parser: 'json' }),
+    function (err) {
+      if (err) throw err;
+    }
+  );
 
-  return spawn(
-    'packer',
-    [
-      'build',
-      `-var-file=configuration/packer-variables.json`,
-      // `-var 'folder=automated'`,
-      // `-var 'vm_name=unifi-network-pauline'`,
-      // `-var 'ipaddr=192.168.15.151/24'`,
+  console.log(
+    spawn(
+      'packer',
+      [
+        'build',
+        `-var-file=../configuration/packer-variables.json`,
+        // `-var 'folder=automated'`,
+        // `-var 'vm_name=unifi-network-pauline'`,
+        // `-var 'ipaddr=192.168.15.151/24'`,
 
-      `${dir}${configFile}`,
-      // `packer-scripts/unifi-network/unifi-network.json`,
-    ],
-    { encoding: 'utf8' }
+        `${dir}${configFile}`,
+        // `packer-scripts/unifi-network/unifi-network.json`,
+      ],
+      { encoding: 'utf8' }
+    ).stdout.toString()
   );
 };
 
-console.log(packer().stdout.toString());
+packer();
