@@ -17,7 +17,7 @@ import prettier from 'prettier';
 //   }
 // })();
 
-const packer = async () => {
+const packer = () => {
   const dir = 'tmp/';
   const configFile = 'config.json';
 
@@ -25,12 +25,10 @@ const packer = async () => {
     fs.mkdirSync(dir);
   }
 
-  await fs.writeFile(
+  fs.writeFileSync(
     `${dir}${configFile}`,
     prettier.format(JSON.stringify(fusion()), { parser: 'json' }),
-    function (err) {
-      if (err) throw err;
-    }
+    'utf8'
   );
 
   console.log(
