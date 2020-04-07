@@ -344,7 +344,7 @@ support:
 BUILD
 
 ```
-
+node --experimental-modules ./build.mjs
 ```
 
 ### level0 Ubuntu 16.04
