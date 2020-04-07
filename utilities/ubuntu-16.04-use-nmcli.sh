@@ -30,10 +30,9 @@ then
     ipv4.method "manual"
 fi
 
-
 # sudo ifdown --exclude=lo -a && sudo ifup --exclude=lo -a
 # sudo service network-manager restart
 
-nmcli con show
+nmcli con show 
 nmcli dev status
 ip addr show
