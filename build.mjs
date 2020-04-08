@@ -1,4 +1,4 @@
-import fusion from './packer/builders/fusion';
+import fusion from './packer/builders/fusion-iso';
 import { spawnSync as spawn } from 'child_process';
 import fs from 'fs';
 import prettier from 'prettier';
@@ -27,7 +27,14 @@ const packer = () => {
 
   fs.writeFileSync(
     `${dir}${configFile}`,
-    prettier.format(JSON.stringify(fusion()), { parser: 'json' }),
+    prettier.format(
+      JSON.stringify(
+        fusion({
+          vm_name: 'ubuntu-16.04-template',
+        })
+      ),
+      { parser: 'json' }
+    ),
     'utf8'
   );
 

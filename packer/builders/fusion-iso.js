@@ -1,4 +1,4 @@
-module.exports = () => ({
+module.exports = ({ vm_name }) => ({
   builders: [
     {
       type: 'vmware-iso',
@@ -6,14 +6,15 @@ module.exports = () => ({
         'http://old-releases.ubuntu.com/releases/16.04.5/ubuntu-16.04.5-server-amd64.iso',
       iso_checksum: '24636fd103a2a43c95659f1c3c63718e',
       iso_checksum_type: 'md5',
-      floppy_files: ['{{template_dir}}/ubuntu-16.04-preseed.cfg'],
-      memory: '1024',
-      vm_name: 'ubuntu-16.04-template',
+      floppy_files: [`${process.cwd()}/level0/ubuntu-16.04-preseed.cfg`],
+      // memory: 1024,
+      vm_name,
       disk_size: 32768,
       disk_type_id: 1,
       guest_os_type: 'ubuntu64Guest',
       network_adapter_type: 'vmxnet3',
-      network: 'bridged',
+      // network: 'bridged',
+      output_directory: `/Users/chris/Virtual Machines Mobile/${vm_name}`,
       communicator: 'ssh',
       ssh_username: '{{user `ssh_username`}}',
       ssh_password: '{{user `ssh_password`}}',
@@ -46,7 +47,7 @@ module.exports = () => ({
     },
     {
       type: 'shell',
-      scripts: ['machines/level0/ubuntu-16.04-template-setup.sh'],
+      scripts: [`${process.cwd()}/level0/ubuntu-16.04-template-setup.sh`],
       execute_command:
         "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
     },
