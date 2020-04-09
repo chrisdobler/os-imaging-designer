@@ -1,5 +1,5 @@
 import fusion from './packer/builders/fusion-iso';
-import { spawnSync as spawn } from 'child_process';
+import { spawn } from 'child_process';
 import fs from 'fs';
 import prettier from 'prettier';
 
@@ -38,22 +38,28 @@ const packer = () => {
     'utf8'
   );
 
-  console.log(
-    spawn(
-      'packer',
-      [
-        'build',
-        `-var-file=../configuration/packer-variables.json`,
-        // `-var 'folder=automated'`,
-        // `-var 'vm_name=unifi-network-pauline'`,
-        // `-var 'ipaddr=192.168.15.151/24'`,
+  const child = spawn(
+    'packer',
+    [
+      'build',
+      `-var-file=../configuration/packer-variables.json`,
+      // `-var 'folder=automated'`,
+      // `-var 'vm_name=unifi-network-pauline'`,
+      // `-var 'ipaddr=192.168.15.151/24'`,
 
-        `${dir}${configFile}`,
-        // `packer-scripts/unifi-network/unifi-network.json`,
-      ],
-      { encoding: 'utf8' }
-    ).stdout.toString()
+      `${dir}${configFile}`,
+      // `packer-scripts/unifi-network/unifi-network.json`,
+    ],
+    { encoding: 'utf8' }
   );
+
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+  });
+
+  child.stderr.on('data', (data) => {
+    console.error(`${data}`);
+  });
 };
 
 packer();
