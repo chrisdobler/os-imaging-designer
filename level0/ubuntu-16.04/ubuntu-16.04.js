@@ -1,6 +1,6 @@
-import { ssh } from 'common';
+import { ssh } from '../../packer/builders/common';
 
-module.exports = ({ vm_name }) => ({
+export default ({ vm_name }) => ({
   builders: [
     {
       type: 'vmware-iso',

@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
-    "prettier": "^2.0.4"
+    "esm": "^3.2.25",
+    "prettier": "^2.0.4",
+    "stdio": "^2.1.1"
   }
 }

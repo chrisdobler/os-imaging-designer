@@ -15,4 +15,4 @@ sudo mv id_rsa.pub .ssh/authorized_keys
 # ubuntu will lock the boot partition if any errors are detected. this saves you.
 # /etc/fstab: static file system information.
 # sudo fdisk -l
-sudo tune2fs -c 1 /dev/sdXY
+# sudo tune2fs -c 1 /dev/sdXY

@@ -32,6 +32,15 @@ see: https://github.com/vmware/govmomi/releases
 % chmod +x /usr/local/bin/govc
 ```
 
+create profiles for all your deployment targets:
+
+```
+./private-config/profiles/<profile-name>.json
+{
+  "type": vsphere | workstation(includes fusion)
+}
+```
+
 ## Supported platforms
 
 This is a lits of all the application servers which are currently supported, and what their level of support is currently at. The hardcoded values will be phased out soon.
@@ -344,7 +353,7 @@ support:
 BUILD
 
 ```
-node --experimental-modules ./build.mjs
+node -r esm ./build.js --profile esx4-pauline.json
 ```
 
 ### level0 Ubuntu 16.04
@@ -355,6 +364,10 @@ This is a base build script to install the operating system and perform as much 
 - Installs recommended baseline sotware
 - Updates system
 - todo: remove splash screen
+
+```
+node -r esm ./build.js --profile esx4-pauline.json --name ubuntu-16.04-template --type ubuntu-16.04
+```
 
 ### level0 Windows 2012
 
