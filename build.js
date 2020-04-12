@@ -42,8 +42,12 @@ import unifiNetwork from './unifi-network/unifi-network';
     )}`
   );
 
+  const { default: platformModes } = await import(
+    `./packer/platforms/${profile.platformType}.js`
+  );
+
   // import the type of machine to create
-  const type = await import(
+  const { default: type } = await import(
     `./${ops.type}/${ops.type.substring(
       ops.type.indexOf('/') + 1,
       ops.type.length
@@ -62,8 +66,9 @@ import unifiNetwork from './unifi-network/unifi-network';
       `${dir}${configFile}`,
       prettier.format(
         JSON.stringify(
-          type.default({
+          type.builder({
             vm_name: ops.name,
+            platformSpecific: platformModes[type.mode],
           })
         ),
         { parser: 'json' }
