@@ -74,23 +74,23 @@ import stdio from 'stdio';
       'utf8'
     );
 
-    // const child = spawn(
-    //   'packer',
-    //   [
-    //     'build',
-    //     `-var-file=../configuration/packer-variables.json`,
-    //     `${dir}${configFile}`,
-    //   ],
-    //   { encoding: 'utf8' }
-    // );
+    const child = spawn(
+      'packer',
+      [
+        'build',
+        `-var-file=../configuration/packer-variables.json`,
+        `${dir}${configFile}`,
+      ],
+      { encoding: 'utf8' }
+    );
 
-    // child.stdout.on('data', (data) => {
-    //   console.log(`${data}`);
-    // });
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+    });
 
-    // child.stderr.on('data', (data) => {
-    //   console.error(`${data}`);
-    // });
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+    });
   };
 
   packer();

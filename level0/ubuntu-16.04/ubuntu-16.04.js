@@ -56,7 +56,9 @@ export default {
       },
       {
         type: 'shell',
-        scripts: [`${process.cwd()}/level0/ubuntu-16.04-template-setup.sh`],
+        scripts: [
+          `${process.cwd()}/level0/ubuntu-16.04/ubuntu-16.04-template-setup.sh`,
+        ],
         execute_command:
           "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
       },
