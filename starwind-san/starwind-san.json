@@ -1,12 +1,13 @@
 {
   "builders": [
     {
-      "type": "vsphere-iso",
+      "type": "vsphere-clone",
       "vcenter_server": "{{user `vcenter_server`}}",
       "username": "{{user `vcenter_user`}}",
       "password": "{{user `vcenter_password`}}",
       "insecure_connection": "true",
       "datacenter": "{{user `vcenter_datacenter`}}",
+      "template": "automated/{{user `windows_template`}}-updated",
 
       "vm_name": "{{user `vm_name`}}-{{user `dominance`}}",
       "folder": "{{user `folder`}}",
@@ -29,13 +30,36 @@
 
   "provisioners": [
     {
-      "type": "windows-shell",
-      "inline": ["dir c:\\"]
-    },
-    {
       "type": "powershell",
       "environment_vars": "WINRMPASS={{.WinRMPassword}}",
-      "script": 
+      "script": "packer-scripts/utilities/windows/enableTSConnections.ps1"
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc vm.network.add -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{ user `vm_name` }}' -net '{{ user `vm_portgroup2` }}' -net.adapter vmxnet3"
+    },
+
+    {
+      "type": "file",
+      "source": "packer-scripts/utilities/downloadFile.bat",
+      "destination": "C:\\Users\\Administrator\\Transfer"
+    },
+    {
+      // run the file to download the stuff and run the executable
+    },
+
+    // remove this
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "GOVC_PASSWORD={{ user `vcenter_password` }}",
+        "GOVC_DATACENTER={{ user `vcenter_datacenter` }}"
+      ],
+      "command": "govc device.cdrom.insert -k -u {{ user `vcenter_user` }}@{{ user `vcenter_server` }} -vm '{{ user `vm_name` }}'"
     }
   ]
 }
