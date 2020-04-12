@@ -9,6 +9,9 @@ export default {
         vm_name,
         disk_size: 32768,
         guest_os_type: 'ubuntu64Guest',
+        floppy_files: [
+          `${process.cwd()}/level0/ubuntu-16.04/ubuntu-16.04-preseed.cfg`,
+        ],
         ...(() =>
           targetPlatform === 'vmware-workstation'
             ? {
@@ -16,16 +19,12 @@ export default {
                   'http://old-releases.ubuntu.com/releases/16.04.5/ubuntu-16.04.5-server-amd64.iso',
                 iso_checksum: '24636fd103a2a43c95659f1c3c63718e',
                 iso_checksum_type: 'md5',
-                floppy_files: [
-                  `${process.cwd()}/level0/ubuntu-16.04-preseed.cfg`,
-                ],
               }
             : {
                 // iso_paths:
                 //   '[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso',
                 iso_paths:
                   '[Local Datastore] Installations/ubuntu-16.04.5-server-amd64.iso',
-                floppy_files: ['{{template_dir}}/ubuntu-16.04-preseed.cfg'],
               })(),
         boot_command: [
           '<enter><wait><f6><wait><esc><wait>',
