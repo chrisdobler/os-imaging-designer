@@ -1,26 +1,29 @@
+const common = (v) => ({
+  vcenter_server: v.vcenterServer,
+  insecure_connection: 'true',
+  host: v.host,
+  username: v.username,
+  password: v.password,
+  datacenter: v.datacenter,
+  // cluster: '{{user `vcenter_cluster`}}',
+  datastore: v.datastore,
+});
+
 export default (v) => ({
   level0: {
     type: 'vsphere-iso',
-    vcenter_server: v.vcenterServer,
-    insecure_connection: 'true',
-    username: v.username,
-    password: v.password,
-    // cluster: '{{user `vcenter_cluster`}}',
-    host: v.host,
-    datacenter: v.datacenter,
+
     vm_version: 11,
-    cpu_cores: 4,
-    // cpus: 4,
+    // cpu_cores: 4,
+    CPUs: 4,
     ram: '2048',
 
     // network: 'Public LAN',
     network: v.network,
+    resource_pool: 'templates',
 
     network_card: 'vmxnet3',
     guest_os_type: 'ubuntu64Guest',
-
-    // datastore: '{{user `vcenter_datastore`}}',
-
     disk_controller_type: 'pvscsi',
     disk_thin_provisioned: true,
     create_snapshot: false,
@@ -28,5 +31,13 @@ export default (v) => ({
     // shutdown_command: 'shutdown -P now',
 
     folder: 'templates',
+    ...common(v),
+  },
+  level2: {
+    type: 'vsphere-clone',
+    template: 'templates/ubuntu-16.04-template',
+    convert_to_template: false,
+    create_snapshot: false,
+    ...common(v),
   },
 });

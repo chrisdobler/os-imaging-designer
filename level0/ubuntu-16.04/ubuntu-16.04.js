@@ -9,7 +9,7 @@ export default {
         vm_name,
         disk_size: 32768,
         guest_os_type: 'ubuntu64Guest',
-        ...() =>
+        ...(() =>
           targetPlatform === 'vmware-workstation'
             ? {
                 iso_url:
@@ -21,10 +21,12 @@ export default {
                 ],
               }
             : {
+                // iso_paths:
+                //   '[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso',
                 iso_paths:
-                  '[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso',
+                  '[Local Datastore] Installations/ubuntu-16.04.5-server-amd64.iso',
                 floppy_files: ['{{template_dir}}/ubuntu-16.04-preseed.cfg'],
-              },
+              })(),
         boot_command: [
           '<enter><wait><f6><wait><esc><wait>',
           '<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>',

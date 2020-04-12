@@ -3,8 +3,6 @@ import fs from 'fs';
 import prettier from 'prettier';
 import stdio from 'stdio';
 
-import unifiNetwork from './unifi-network/unifi-network';
-
 // packer build \
 // -var 'pool=Automated Machines' \
 // -var-file=configuration/packer-variables.json \
@@ -75,19 +73,6 @@ import unifiNetwork from './unifi-network/unifi-network';
       ),
       'utf8'
     );
-
-    // fs.writeFileSync(
-    //   `${dir}${configFile}`,
-    //   prettier.format(
-    //     JSON.stringify(
-    //       unifiNetwork({
-    //         vm_name: 'unifi-network',
-    //       })
-    //     ),
-    //     { parser: 'json' }
-    //   ),
-    //   'utf8'
-    // );
 
     // const child = spawn(
     //   'packer',

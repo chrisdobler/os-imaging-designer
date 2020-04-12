@@ -4,7 +4,8 @@
   "description": "Dynamic template generation of an assortment of popular OS templates",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "node -r esm ./build.js"
   },
   "author": "Chris Dobler <chrisdobler@gmail.com> (http://chrisdobler.com)",
   "license": "ISC",
