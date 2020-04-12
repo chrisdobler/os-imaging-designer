@@ -50,8 +50,6 @@ import unifiNetwork from './unifi-network/unifi-network';
     )}.js`
   );
 
-  console.log(type.default);
-
   const packer = () => {
     const dir = 'tmp/';
     const configFile = 'config.json';
@@ -91,12 +89,7 @@ import unifiNetwork from './unifi-network/unifi-network';
     //   [
     //     'build',
     //     `-var-file=../configuration/packer-variables.json`,
-    //     // `-var 'folder=automated'`,
-    //     // `-var 'vm_name=unifi-network-pauline'`,
-    //     // `-var 'ipaddr=192.168.15.151/24'`,
-
     //     `${dir}${configFile}`,
-    //     // `packer-scripts/unifi-network/unifi-network.json`,
     //   ],
     //   { encoding: 'utf8' }
     // );
