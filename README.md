@@ -366,7 +366,7 @@ This is a base build script to install the operating system and perform as much 
 - todo: remove splash screen
 
 ```
-node -r esm ./build.js --profile esx4-pauline.json --name ubuntu-16.04-template --type ubuntu-16.04
+node -r esm ./build.js --profile esx4-pauline.json --name ubuntu-16.04-template --type level0/ubuntu-16.04
 ```
 
 ### level0 Windows 2012

@@ -2,19 +2,29 @@ import { ssh } from '../../packer/builders/common';
 
 export default {
   mode: 'level0',
-  builder: ({ vm_name, platformType }) => ({
+  builder: ({ vm_name, targetPlatform, platformSpecific }) => ({
     builders: [
       {
-        type: 'vmware-iso',
-        // headless: true,
-
-        iso_url:
-          'http://old-releases.ubuntu.com/releases/16.04.5/ubuntu-16.04.5-server-amd64.iso',
-        iso_checksum: '24636fd103a2a43c95659f1c3c63718e',
-        iso_checksum_type: 'md5',
-        floppy_files: [`${process.cwd()}/level0/ubuntu-16.04-preseed.cfg`],
-        // memory: 1024,
-        // shutdown_command: 'shutdown -P now',
+        ...platformSpecific,
+        vm_name,
+        disk_size: 32768,
+        guest_os_type: 'ubuntu64Guest',
+        ...() =>
+          targetPlatform === 'vmware-workstation'
+            ? {
+                iso_url:
+                  'http://old-releases.ubuntu.com/releases/16.04.5/ubuntu-16.04.5-server-amd64.iso',
+                iso_checksum: '24636fd103a2a43c95659f1c3c63718e',
+                iso_checksum_type: 'md5',
+                floppy_files: [
+                  `${process.cwd()}/level0/ubuntu-16.04-preseed.cfg`,
+                ],
+              }
+            : {
+                iso_paths:
+                  '[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso',
+                floppy_files: ['{{template_dir}}/ubuntu-16.04-preseed.cfg'],
+              },
         boot_command: [
           '<enter><wait><f6><wait><esc><wait>',
           '<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>',
@@ -33,16 +43,6 @@ export default {
           ' file=/media/ubuntu-16.04-preseed.cfg',
           '<enter>',
         ],
-
-        vm_name,
-        disk_size: 32768,
-        guest_os_type: 'ubuntu64Guest',
-        network_adapter_type: 'vmxnet3',
-        // network: 'bridged',
-
-        disk_type_id: 1,
-        output_directory: `/Users/chris/Virtual Machines Mobile/${vm_name}`,
-
         ...ssh,
       },
     ],

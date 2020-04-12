@@ -68,7 +68,7 @@ import unifiNetwork from './unifi-network/unifi-network';
         JSON.stringify(
           type.builder({
             vm_name: ops.name,
-            platformSpecific: platformModes[type.mode],
+            platformSpecific: platformModes(profile.variables)[type.mode],
           })
         ),
         { parser: 'json' }
