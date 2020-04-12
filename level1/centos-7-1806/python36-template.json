@@ -1,0 +1,36 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-clone",
+      "vcenter_server": "{{user `vcenter_server`}}",
+      "username": "{{user `vcenter_user`}}",
+      "password": "{{user `vcenter_password`}}",
+      "insecure_connection": "true",
+      "datacenter": "{{user `vcenter_datacenter`}}",
+      "resource_pool": "{{user `vcenter_resource_pool`}}",
+
+      "template": "templates/centos-7-1806-template",
+      "vm_name": "python36-template",
+      "folder": "templates/centos-7-1806",
+      "cluster": "{{user `vcenter_cluster`}}",
+      "host": "{{user `vcenter_host`}}",
+      "datastore": "{{user `vcenter_datastore`}}",
+
+      "cpu_cores": "4",
+
+      "communicator": "ssh",
+      "ssh_username": "{{user `centos_ssh_username`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+
+      "convert_to_template": true,
+      "create_snapshot": false
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": ["machines/level1/centos-7-1806/python36-setup.sh"]
+    }
+  ]
+}
