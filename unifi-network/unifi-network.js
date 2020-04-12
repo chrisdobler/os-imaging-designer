@@ -1,4 +1,4 @@
-import { ssh, fusionClone } from 'common';
+import { ssh, fusionClone } from '../packer/builders/common';
 
 module.exports = ({ vm_name }) => ({
   builders: [

@@ -1,7 +1,10 @@
-import fusion from './packer/builders/fusion-iso';
 import { spawn } from 'child_process';
 import fs from 'fs';
 import prettier from 'prettier';
+import stdio from 'stdio';
+
+import fusion from './packer/builders/fusion-iso';
+import unifiNetwork from './unifi-network/unifi-network';
 
 // packer build \
 // -var 'pool=Automated Machines' \
@@ -25,12 +28,25 @@ const packer = () => {
     fs.mkdirSync(dir);
   }
 
+  // fs.writeFileSync(
+  //   `${dir}${configFile}`,
+  //   prettier.format(
+  //     JSON.stringify(
+  //       fusion({
+  //         vm_name: 'ubuntu-16.04-template',
+  //       })
+  //     ),
+  //     { parser: 'json' }
+  //   ),
+  //   'utf8'
+  // );
+
   fs.writeFileSync(
     `${dir}${configFile}`,
     prettier.format(
       JSON.stringify(
-        fusion({
-          vm_name: 'ubuntu-16.04-template',
+        unifiNetwork({
+          vm_name: 'unifi-network',
         })
       ),
       { parser: 'json' }
