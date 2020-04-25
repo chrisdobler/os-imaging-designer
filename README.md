@@ -41,6 +41,16 @@ create profiles for all your deployment targets:
 }
 ```
 
+create a settings file for your machines:
+
+```
+./private-config/<machine name>.json
+{
+  "restore": true|false # restore previous machine backup from ./backup/(backup files)
+  "network": "manual" if you want to set the network configuration manually. rules are set based on the machine type.
+}
+```
+
 ## Supported platforms
 
 This is a lits of all the application servers which are currently supported, and what their level of support is currently at. The hardcoded values will be phased out soon.
@@ -58,6 +68,8 @@ BUILD
 
 ```
 packer build -var-file=configuration/packer-variables.json packer-scripts/pi-hole/pi-hole.json
+
+yarn deploy --profile esx4-pauline.json --name pihole-pauline --type pi-hole
 ```
 
 BACKUP
