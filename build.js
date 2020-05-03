@@ -30,6 +30,12 @@ import stdio from 'stdio';
       description:
         'Type of machine to create from the list of supported builders',
     },
+    restore: {
+      key: 'r',
+      required: false,
+      description:
+        'if you would like to restore backup data from an existing machine',
+    },
   });
 
   // import the deployment profile
@@ -52,6 +58,10 @@ import stdio from 'stdio';
     )}.js`
   );
 
+  const { default: machineTypeSpecific } = await import(
+    `./packer/machineTypes/${type.machineType}.js`
+  );
+
   const packer = () => {
     const dir = 'tmp/';
     const configFile = 'config.json';
@@ -67,6 +77,10 @@ import stdio from 'stdio';
           type.builder({
             vm_name: ops.name,
             platformSpecific: platformModes(profile.variables)[type.mode],
+            machineTypeSpecific: machineTypeSpecific({ vm_name: ops.name }),
+            options: {
+              restore: ops.restore,
+            },
           })
         ),
         { parser: 'json' }

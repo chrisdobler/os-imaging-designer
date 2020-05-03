@@ -8,7 +8,6 @@
       "insecure_connection": "true",
       "datacenter": "{{user `vcenter_datacenter`}}",
       "resource_pool": "{{user `pool`}}",
-
       "template": "templates/ubuntu-16.04-template",
       "CPUs": 1,
       "vm_name": "{{user `vm_name`}}-fog-source",
