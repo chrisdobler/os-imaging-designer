@@ -20,13 +20,7 @@ export default {
         },
       ],
       provisioners: [
-        machineTypeSpecific,
-        {
-          type: 'shell',
-          script: `${process.cwd()}/pi-hole/pi-hole-network-setup.sh`,
-          execute_command:
-            "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
-        },
+        ...machineTypeSpecific,
         {
           type: 'shell',
           script: `${process.cwd()}/pi-hole/pi-hole-setup.sh`,
