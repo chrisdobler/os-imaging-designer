@@ -51,9 +51,31 @@ create a settings file for your machines:
 }
 ```
 
+## Usage
+
+Build a machine using a command like this:
+
+```
+yarn deploy
+--profile {the host platform}.json
+--name {name of the machine you are building}
+--type {the machine template you are building from the list below.}
+--restore ## if you want to restore previous backup.
+```
+
 ## Supported platforms
 
 This is a lits of all the application servers which are currently supported, and what their level of support is currently at. The hardcoded values will be phased out soon.
+
+### Minecraft Server
+
+reference: https://www.minecraft.net/en-us/download/server/
+type: minecraft
+
+support:
+
+- Build - OK
+- Backups - in progress...
 
 #### Pi Hole Server
 
