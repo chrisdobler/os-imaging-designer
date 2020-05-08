@@ -77,6 +77,20 @@ support:
 - Build - OK
 - Backups - in progress...
 
+how to restore a world...
+
+```
+^C
+^A D
+killall -9 java
+cd backups
+unzip {which backup}
+rsync -a minecraft_server/* ../
+cd ..
+chmod +x start.sh
+./start.sh
+```
+
 #### Pi Hole Server
 
 reference: https://pi-hole.net/, https://github.com/pi-hole/pi-hole
@@ -89,15 +103,19 @@ support:
 BUILD
 
 ```
+
 packer build -var-file=configuration/packer-variables.json packer-scripts/pi-hole/pi-hole.json
 
 yarn deploy --profile esx4-pauline.json --name pihole-pauline --type pi-hole
+
 ```
 
 BACKUP
 
 ```
-scp -r user@192.168.16.4:/etc/pihole/* configuration/ds-pi-hole/etc/pihole/
+
+scp -r user@192.168.16.4:/etc/pihole/\* configuration/ds-pi-hole/etc/pihole/
+
 ```
 
 #### DHCP ISC Server Cluster
@@ -112,6 +130,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'dominance=<master|backup>' \
 -var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
@@ -119,6 +138,7 @@ packer build \
 -var 'folder=<esx1-dedicated|esx2-dedicated>' \
 -var 'ipaddr=<192.168.16.23|192.168.16.49>/24' \
 packer-scripts/dhcp/dhcp.json
+
 ```
 
 packer build \
@@ -140,7 +160,8 @@ packer-scripts/dhcp/dhcp.json
 BACKUP
 
 ```
-scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/* configuration/ds-dhcp-<master|backup>/etc/dhcp/
+
+scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/\* configuration/ds-dhcp-<master|backup>/etc/dhcp/
 // todo: backup sqlite
 
 ```
@@ -152,16 +173,19 @@ scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-backup/etc/dhcp/
 UPDATE SETTINGS
 
 ```
+
 scp -r configuration/ds-dhcp-master/etc/dhcp/ user@ds-dhcp-master:~
 export PASS=<password>
-echo $PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/* /etc/dhcp/ && service isc-dhcp-server restart && service isc-dhcp-server status"'
+echo \$PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/\* /etc/dhcp/ && service isc-dhcp-server restart && service isc-dhcp-server status"'
 
 ```
 
 GET MACHINE IP
 
 ```
+
 ssh user@ds-dhcp-master cat /var/lib/dhcp/dhcpd.leases
+
 ```
 
 #### Open vSwitch
@@ -178,6 +202,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \
@@ -187,7 +212,7 @@ packer build \
 packer-scripts/open-vswitch/open-vswitch.json
 
 export MATREMPASS=<password>
-sshpass -p $MATREMPASS scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx root@192.168.16.5:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/
+sshpass -p \$MATREMPASS scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx root@192.168.16.5:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/
 
 # enable an image from fog
 
@@ -198,7 +223,9 @@ sshpass -p $MATREMPASS scp -r configuration/ds-sw02/ds-sw02-fog-source.vmx root@
 ADJUST VM TEMPLATE
 
 ```
+
 scp -r root@192.168.16.5:/vmfs/volumes/5cec0655-eb3c09f0-c5f2-0010e044a0f9/ds-sw02-fog-source/ds-sw02-fog-source.vmx configuration/ds-sw02/
+
 ```
 
 #### Fog Server
@@ -213,6 +240,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \
@@ -239,21 +267,25 @@ packer build \
 -var 'ipaddr=192.168.16.44/24' \
 -var 'ipaddr2=10.0.0.44/24' \
 packer-scripts/fog/fog-network-add-adapter.json
+
 ```
 
 BACKUP
 
 ```
+
 export PASS=<password>
-echo $PASS | ssh user@ds-fog1 sudo -S sh -c '"sudo mysqldump -B fog > ~/fogdb.sql && ls -la ~"'
+echo \$PASS | ssh user@ds-fog1 sudo -S sh -c '"sudo mysqldump -B fog > ~/fogdb.sql && ls -la ~"'
 scp -r user@ds-fog1:~/fogdb.sql configuration/ds-fog1/
+
 ```
 
 UPDATE
 
 ```
+
 scp -r configuration/ds-fog1 user@ds-fog1:/home/user/transfer
-echo $PASS | ssh user@ds-fog1 sudo -S sh -c '"cp -r transfer/var/www/html /var/www/"'
+echo \$PASS | ssh user@ds-fog1 sudo -S sh -c '"cp -r transfer/var/www/html /var/www/"'
 
 ```
 
@@ -269,6 +301,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \
@@ -276,14 +309,17 @@ packer build \
 -var 'vm_name=ds-home-assistant1' \
 -var 'ipaddr=192.168.16.48/24' \
 packer-scripts/home-assistant/home-assistant.json
+
 ```
 
 BACKUP
 
 ```
-echo '.backup haBackup.db'  | sqlite3 /usr/share/hassio/homeassistant/home-assistant_v2.db
+
+echo '.backup haBackup.db' | sqlite3 /usr/share/hassio/homeassistant/home-assistant_v2.db
 scp -r user@ds-home-assistant1:/home/user/haBackup.db configuration/ds-home-assistant1/usr/share/hassio/homeassistant/home-assistant_v2.db
-scp -r user@ds-home-assistant1:/usr/share/hassio/* configuration/ds-home-assistant1/usr/share/hassio/
+scp -r user@ds-home-assistant1:/usr/share/hassio/\* configuration/ds-home-assistant1/usr/share/hassio/
+
 ```
 
 ### Starwind vSAN
@@ -298,6 +334,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'vm_name=DSs014-starwind|DSs015-starwind' \
 -var 'dominance=<master|backup>' \
@@ -315,6 +352,7 @@ packer build \
 -var 'folder=esx1-dedicated' \
 -var 'ipaddr=192.168.16.56/24' \
 packer-scripts/starwind-san/starwind-san.json
+
 ```
 
 ### PetaSAN
@@ -329,6 +367,7 @@ support:
 BUILD
 
 ```
+
 packer build \
 -var 'member=active|backup|witness' \
 -var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
@@ -344,6 +383,7 @@ packer build \
 -var 'folder=esx1-dedicated' \
 -var 'ipaddr=192.168.16.56/24' \
 packer-scripts/petasan/petasan.json
+
 ```
 
 ### ZFS Replicate
@@ -351,28 +391,36 @@ packer-scripts/petasan/petasan.json
 restore:
 
 ```
+
 scp -r /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin/zfs-replicate root@ds-freenas2:/root/bin/
+
 ```
 
 backup settings:
 
 ```
+
 scp -r root@ds-freenas2:/root/bin/zfs-replicate/ /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin
+
 ```
 
 monitor:
 
 ```
+
 ls -latr /root/bin/zfs-replicate/logs/
-find . -name "*.log" | xargs tail -f
+find . -name "\*.log" | xargs tail -f
+
 ```
 
 manually start replicator:
 
 ```
+
 /root/bin/zfs-replicate/zfs-replicate.sh /root/bin/zfs-replicate/config.sh
 
 /root/bin/zfs-replicate/copy-operation/zfs-replicate.sh /root/bin/zfs-replicate/copy-operation/config.sh
+
 ```
 
 ### Ubiquiti Unifi Network Controller
@@ -387,7 +435,9 @@ support:
 BUILD
 
 ```
+
 yarn deploy --profile esx4-pauline.json --name unifi-network-pauline --type unifi-network
+
 ```
 
 ### level0 Ubuntu 16.04
@@ -400,12 +450,15 @@ This is a base build script to install the operating system and perform as much 
 - todo: remove splash screen
 
 ```
+
 yarn deploy --profile esx4-pauline.json --name ubuntu-16.04-template --type level0/ubuntu-16.04
+
 ```
 
 ### level0 Windows 2012
 
 ```
+
 packer build \
 -var 'pool=Automated Machines' \
 -var-file=configuration/packer-variables.json \
@@ -413,4 +466,9 @@ packer build \
 -var 'vm_name=windows-2012' \
 -var 'window2012_scripts_folder=packer-scripts/level0/windows2012' \
 packer-scripts/level0/windows2012/windows2012.json
+
+```
+
+```
+
 ```
