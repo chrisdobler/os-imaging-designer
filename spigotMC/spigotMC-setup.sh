@@ -8,10 +8,19 @@ sudo apt-get install -y unzip
 
 
 # could put this behind upgrade flag
+# wget https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar
 
 mkdir minecraft_server
+mkdir build_tools
+cd build_tools
+wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+git config --global --unset core.autocrlf
+java -jar BuildTools.jar --rev latest
+mv spigot-1.15.2.jar ../minecraft_server
 cd minecraft_server
-wget https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar
+echo '#!/bin/sh\n
+java -Xms1G -Xmx1G -XX:+UseConcMarkSweepGC -jar spigot.jar nogui' > start.sh
+chmod +x start.sh
 
 # todo: discover issue with minecraft game broadcast. below is wip.
 # sudo iptables -A INPUT -m state --state NEW -m udp -p udp --dport 4445 -j ACCEPT

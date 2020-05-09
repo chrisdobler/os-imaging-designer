@@ -30,14 +30,6 @@ export default {
       ],
     };
 
-    // if restoring config
-    // if (options.restore)
-    //   base.provisioners.unshift({
-    //     type: 'file',
-    //     source: `configuration/${vm_name}/etc/pihole`,
-    //     destination: '/home/user',
-    //   });
-
     return base;
   },
 };

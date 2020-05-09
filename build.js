@@ -65,26 +65,45 @@ import stdio from 'stdio';
   const packer = () => {
     const dir = 'tmp/';
     const configFile = 'config.json';
+    const vm_name = ops.name;
 
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
 
+    let output = type.builder({
+      vm_name,
+      platformSpecific: platformModes(profile.variables)[type.mode],
+    });
+
+    output.provisioners.push({
+      type: 'shell',
+      script: `${process.cwd()}/${ops.type}/${ops.type}-setup.sh`,
+      execute_command:
+        "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
+    });
+
+    // if restoring config
+    if (ops.restore)
+      output.provisioners.unshift({
+        type: 'file',
+        source: `configuration/${vm_name}/backup`,
+        destination: '/home/user',
+      });
+    else if (type.supportsInitialBuild) {
+      output.provisioners.unshift({
+        type: 'shell',
+        script: `${process.cwd()}/${ops.type}/${ops.type}-init.sh`,
+        execute_command:
+          "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
+      });
+    }
+
+    output.provisioners.unshift(...machineTypeSpecific({ vm_name: ops.name }));
+
     fs.writeFileSync(
       `${dir}${configFile}`,
-      prettier.format(
-        JSON.stringify(
-          type.builder({
-            vm_name: ops.name,
-            platformSpecific: platformModes(profile.variables)[type.mode],
-            machineTypeSpecific: machineTypeSpecific({ vm_name: ops.name }),
-            options: {
-              restore: ops.restore,
-            },
-          })
-        ),
-        { parser: 'json' }
-      ),
+      prettier.format(JSON.stringify(output), { parser: 'json' }),
       'utf8'
     );
 
