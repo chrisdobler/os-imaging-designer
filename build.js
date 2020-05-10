@@ -73,9 +73,10 @@ import stdio from 'stdio';
 
     let output = type.builder({
       vm_name,
-      platformSpecific: platformModes(profile.variables, type.overrides || {})[
-        type.mode
-      ],
+      platformSpecific: {
+        ...platformModes(profile.variables)[type.mode],
+        ...(type.overrides || {}),
+      },
     });
 
     output.provisioners.push({
