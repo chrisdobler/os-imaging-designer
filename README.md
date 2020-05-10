@@ -43,8 +43,17 @@ create profiles for all your deployment targets:
 
 create a settings file for your machines:
 
+the folder is structured like this:
+
 ```
-./private-config/<machine name>.json
+./private-config/
+  <machine name>.json
+  backup/..
+```
+
+the ./private-config/<machine name>.json file:
+
+```
 {
   "restore": true|false # restore previous machine backup from ./backup/(backup files)
   "network": "manual" if you want to set the network configuration manually. rules are set based on the machine type.
@@ -74,10 +83,20 @@ type: minecraft
 
 support:
 
+- Build - in progress
+- Backups - in progress...
+
+### Spigot MC Minecraft Server
+
+reference: https://www.spigotmc.org/
+type: spigotMC
+
+support:
+
 - Build - OK
 - Backups - in progress...
 
-how to restore a world...
+how to restore a world backup
 
 ```
 ^C
