@@ -73,7 +73,9 @@ import stdio from 'stdio';
 
     let output = type.builder({
       vm_name,
-      platformSpecific: platformModes(profile.variables)[type.mode],
+      platformSpecific: platformModes(profile.variables, type.overrides || {})[
+        type.mode
+      ],
     });
 
     output.provisioners.push({
@@ -87,11 +89,11 @@ import stdio from 'stdio';
     if (ops.restore)
       output.provisioners.unshift({
         type: 'file',
-        source: `configuration/${vm_name}/backup`,
+        source: `../configuration/${vm_name}/backup/`,
         destination: '/home/user',
       });
     else if (type.supportsInitialBuild) {
-      output.provisioners.unshift({
+      output.provisioners.push({
         type: 'shell',
         script: `${process.cwd()}/${ops.type}/${ops.type}-init.sh`,
         execute_command:
@@ -99,6 +101,12 @@ import stdio from 'stdio';
       });
     }
 
+    if (type.supportFiles)
+      output.provisioners.unshift({
+        type: 'file',
+        source: `${process.cwd()}/${ops.type}/files/`,
+        destination: '/home/user',
+      });
     output.provisioners.unshift(...machineTypeSpecific({ vm_name: ops.name }));
 
     fs.writeFileSync(
