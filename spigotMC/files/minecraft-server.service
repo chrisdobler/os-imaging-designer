@@ -1,7 +1,8 @@
 [Service]
-Type=simple
+Type=forking
 WorkingDirectory=/home/user/minecraft_server
-Restart=on-failure
-RestartSec=3
 ExecStart=/usr/bin/screen -L -S "Minecraft server 1" -dm java -Xms1G -Xmx1G -XX:+UseConcMarkSweepGC -jar spigot.jar nogui
 RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

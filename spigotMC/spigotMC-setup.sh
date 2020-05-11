@@ -7,13 +7,12 @@ sudo apt-get install -y unzip
 mkdir minecraft_server
 mv start.sh minecraft_server
 chmod +x minecraft_server/start.sh
-chmod 744 boot.sh
 
-mv minecraft-server.service /etc/systemd/system/
-chmod 664 /etc/systemd/system/minecraft-server.service
+sudo mv minecraft-server.service /etc/systemd/system/
+sudo chmod 664 /etc/systemd/system/minecraft-server.service
 
-systemctl daemon-reload
-systemctl enable minecraft-server.service
+sudo systemctl daemon-reload
+sudo systemctl enable minecraft-server.service
 
 # todo: discover issue with minecraft game broadcast. below is wip.
 # sudo iptables -A INPUT -m state --state NEW -m udp -p udp --dport 4445 -j ACCEPT
