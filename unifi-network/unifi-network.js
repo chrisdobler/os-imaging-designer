@@ -2,6 +2,9 @@ import { ssh, fusionClone } from '../packer/builders/common';
 
 export default {
   mode: 'level2',
+  machineType: 'ubuntu-16.04',
+  supportsInitialBuild: false,
+  supportFiles: false,
   builder: ({ vm_name, targetPlatform, platformSpecific }) => ({
     builders: [
       {
@@ -11,19 +14,6 @@ export default {
         ...ssh,
       },
     ],
-    provisioners: [
-      {
-        type: 'shell',
-        script: `${process.cwd()}/unifi-network/unifi-network-setup-network.sh`,
-        execute_command:
-          "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
-      },
-      {
-        type: 'shell',
-        script: `${process.cwd()}/unifi-network/unifi-network-setup.sh`,
-        execute_command:
-          "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
-      },
-    ],
+    provisioners: [],
   }),
 };
