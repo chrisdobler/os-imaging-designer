@@ -1,7 +1,9 @@
-export default ({ vm_name }) => [
+export default ({ location, vm_name }) => [
   {
     type: 'file',
-    source: `../configuration/${vm_name}/interfaces`,
+    source: `../configuration/${
+      location && `${location}/`
+    }${vm_name}/interfaces`,
     destination: '/home/user/',
   },
   {

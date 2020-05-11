@@ -30,6 +30,11 @@ import stdio from 'stdio';
       description:
         'Type of machine to create from the list of supported builders',
     },
+    location: {
+      key: 'l',
+      description:
+        'The datacenter location. Used for classing machines into logical groups.',
+    },
     restore: {
       key: 'r',
       required: false,
@@ -45,6 +50,8 @@ import stdio from 'stdio';
       ops.profile.length
     )}`
   );
+
+  const location = ops.location || profile.location || null;
 
   const { default: platformModes } = await import(
     `./packer/platforms/${profile.platformType}.js`
@@ -90,7 +97,9 @@ import stdio from 'stdio';
     if (ops.restore)
       output.provisioners.unshift({
         type: 'file',
-        source: `../configuration/${vm_name}/backup/`,
+        source: `../configuration/${
+          location && `${location}/`
+        }${vm_name}/backup/`,
         destination: '/home/user',
       });
     else if (type.supportsInitialBuild) {
@@ -108,7 +117,7 @@ import stdio from 'stdio';
         source: `${process.cwd()}/${ops.type}/files/`,
         destination: '/home/user',
       });
-    output.provisioners.unshift(...machineTypeSpecific({ vm_name: ops.name }));
+    output.provisioners.unshift(...machineTypeSpecific({ vm_name, location }));
 
     fs.writeFileSync(
       `${dir}${configFile}`,

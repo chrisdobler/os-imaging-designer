@@ -91,9 +91,13 @@ support:
 reference: https://www.spigotmc.org/
 type: spigotMC
 
+The SpigotMC Minecraft server supports automated initial deployments with no restore.
+Please note - you will need to accept the eula file before it will work.
+
 support:
 
-- Build - OK
+- Restores - Yes
+- Init Builds - Yes
 - Backups - in progress...
 
 how to restore a world backup
@@ -454,7 +458,6 @@ support:
 BUILD
 
 ```
-
 yarn deploy --profile esx4-pauline.json --name unifi-network-pauline --type unifi-network
 
 ```
