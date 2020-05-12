@@ -22,9 +22,7 @@ export default {
               }
             : {
                 // iso_paths:
-                //   '[Installations] Linux/Ubuntu/ubuntu-16.04.5-server-amd64.iso',
-                iso_paths:
-                  '[Local Datastore] Installations/ubuntu-16.04.5-server-amd64.iso',
+                //   '[Local Datastore] Installations/ubuntu-16.04.5-server-amd64.iso',
               })(),
         boot_command: [
           '<enter><wait><f6><wait><esc><wait>',
@@ -52,14 +50,6 @@ export default {
         type: 'file',
         source: '/Users/chris/.ssh/id_rsa.pub',
         destination: '/home/user/',
-      },
-      {
-        type: 'shell',
-        scripts: [
-          `${process.cwd()}/level0/ubuntu-16.04/ubuntu-16.04-template-setup.sh`,
-        ],
-        execute_command:
-          "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
       },
     ],
   }),

@@ -41,6 +41,11 @@ import stdio from 'stdio';
       description:
         'if you would like to restore backup data from an existing machine',
     },
+    force: {
+      key: 'f',
+      required: false,
+      description: 'Force an overwrite of an existing machine.',
+    },
   });
 
   // import the deployment profile
@@ -52,6 +57,7 @@ import stdio from 'stdio';
   );
 
   const location = ops.location || profile.location || null;
+  let machineTypeSpecific = null;
 
   const { default: platformModes } = await import(
     `./packer/platforms/${profile.platformType}.js`
@@ -65,9 +71,11 @@ import stdio from 'stdio';
     )}.js`
   );
 
-  const { default: machineTypeSpecific } = await import(
-    `./packer/machineTypes/${type.machineType}.js`
-  );
+  if (type.mode !== 'level0') {
+    machineTypeSpecific = await import(
+      `./packer/machineTypes/${type.machineType}.js`
+    ).default;
+  }
 
   const packer = () => {
     const dir = 'tmp/';
@@ -83,12 +91,19 @@ import stdio from 'stdio';
       platformSpecific: {
         ...platformModes(profile.variables)[type.mode],
         ...(type.overrides || {}),
+        ...profile.options,
+        ...(profile.media[ops.type.replace(`level0/`, '')]
+          ? profile.media[ops.type.replace(`level0/`, '')]
+          : {}),
       },
     });
 
     output.provisioners.push({
       type: 'shell',
-      script: `${process.cwd()}/${ops.type}/${ops.type}-setup.sh`,
+      script: `${process.cwd()}/${ops.type}/${ops.type.replace(
+        `level0/`,
+        ''
+      )}-setup.sh`,
       execute_command:
         "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
     });
@@ -105,7 +120,10 @@ import stdio from 'stdio';
     else if (type.supportsInitialBuild) {
       output.provisioners.push({
         type: 'shell',
-        script: `${process.cwd()}/${ops.type}/${ops.type}-init.sh`,
+        script: `${process.cwd()}/${ops.type}/${ops.type.replace(
+          'level0/',
+          ''
+        )}-init.sh`,
         execute_command:
           "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
       });
@@ -117,7 +135,11 @@ import stdio from 'stdio';
         source: `${process.cwd()}/${ops.type}/files/`,
         destination: '/home/user',
       });
-    output.provisioners.unshift(...machineTypeSpecific({ vm_name, location }));
+
+    if (type.mode !== 'level0')
+      output.provisioners.unshift(
+        ...machineTypeSpecific({ vm_name, location })
+      );
 
     fs.writeFileSync(
       `${dir}${configFile}`,
@@ -129,6 +151,7 @@ import stdio from 'stdio';
       'packer',
       [
         'build',
+        // ops.force && `-force`,
         `-var-file=../configuration/packer-variables.json`,
         `${dir}${configFile}`,
       ],
