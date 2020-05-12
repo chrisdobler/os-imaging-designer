@@ -74,7 +74,8 @@ import stdio from 'stdio';
   if (type.mode !== 'level0') {
     machineTypeSpecific = await import(
       `./packer/machineTypes/${type.machineType}.js`
-    ).default;
+    );
+    machineTypeSpecific = machineTypeSpecific.default;
   }
 
   const packer = () => {
