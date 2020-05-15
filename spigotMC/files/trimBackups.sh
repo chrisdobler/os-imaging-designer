@@ -1,10 +1,11 @@
-ls -t | tail -n +4
+ls -t minecraft_server/backups | tail -n +4
 
-echo -n "Delete these files?: Y/n"
+echo -n "Delete these files?: Y/n "
 read VAR
 
-if [[ $VAR -eq "Y" ]]
+if [[ $VAR == "Y" ]]
 then
   echo "Deleteing files..."
-# ls -t | tail -n +4 | xargs rm --
+  cd minecraft_server/backups
+  ls -t | tail -n +4 | xargs rm --
 fi
