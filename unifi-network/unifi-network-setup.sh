@@ -1,6 +1,3 @@
-# sudo apt-get install nagios-nrpe-server nagios-plugins openssl nagios-nrpe-plugin nagios-plugins-extra nagios-plugins-basic
-# sudo vim /etc/nagios/nrpe.cfg
-
 sudo apt-get update
 
 sudo apt-get -y install openjdk-8-jre-headless

@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import fs from 'fs';
 import prettier from 'prettier';
 import stdio from 'stdio';
+import { ssh } from './packer/builders/common';
 
 // packer build \
 // -var 'pool=Automated Machines' \
@@ -87,17 +88,29 @@ import stdio from 'stdio';
       fs.mkdirSync(dir);
     }
 
-    let output = type.builder({
-      vm_name,
-      platformSpecific: {
+    let output = type.builder
+      ? type.builder({
+          vm_name,
+          platformSpecific: {},
+        })
+      : {
+          builders: [{}],
+          provisioners: [],
+        };
+
+    output.builders = [
+      {
+        ...(output && output.builders[0]),
         ...platformModes(profile.variables)[type.mode],
         ...(type.overrides || {}),
         ...profile.options,
-        ...(profile.media[ops.type.replace(`level0/`, '')]
+        ...(profile.media && profile.media[ops.type.replace(`level0/`, '')]
           ? profile.media[ops.type.replace(`level0/`, '')]
           : {}),
+        vm_name,
+        ...ssh,
       },
-    });
+    ];
 
     output.provisioners.push({
       type: 'shell',

@@ -1,12 +1,8 @@
-import { ssh } from '../../packer/builders/common';
-
 export default {
   mode: 'level0',
-  builder: ({ vm_name, targetPlatform, platformSpecific }) => ({
+  builder: ({ targetPlatform }) => ({
     builders: [
       {
-        ...platformSpecific,
-        vm_name,
         disk_size: 32768,
         guest_os_type: 'ubuntu64Guest',
         floppy_files: [
@@ -42,7 +38,6 @@ export default {
           ' file=/media/ubuntu-16.04-preseed.cfg',
           '<enter>',
         ],
-        ...ssh,
       },
     ],
     provisioners: [

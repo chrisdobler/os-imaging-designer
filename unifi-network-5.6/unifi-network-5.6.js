@@ -1,17 +1,12 @@
-import { ssh, fusionClone } from '../packer/builders/common';
-
 export default {
   mode: 'level2',
   machineType: 'ubuntu-16.04',
   supportsInitialBuild: false,
   supportFiles: false,
-  builder: ({ vm_name, targetPlatform, platformSpecific }) => ({
+  builder: ({ targetPlatform }) => ({
     builders: [
       {
-        ...platformSpecific,
-        vm_name,
         ...(() => (targetPlatform === 'vmware-workstation' ? {} : {}))(),
-        ...ssh,
       },
     ],
     provisioners: [],

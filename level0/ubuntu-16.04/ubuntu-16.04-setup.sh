@@ -15,4 +15,11 @@ sudo mv id_rsa.pub .ssh/authorized_keys
 # ubuntu will lock the boot partition if any errors are detected. this saves you.
 # /etc/fstab: static file system information.
 # sudo fdisk -l
-# sudo tune2fs -c 1 /dev/sdXY
+sudo tune2fs -c 1 /dev/sda1
+
+# todo: sudo rsync
+# https://askubuntu.com/questions/719439/using-rsync-with-sudo-on-the-destination-machine
+
+# todo: setup nagios monitoring
+# sudo apt-get install nagios-nrpe-server nagios-plugins openssl nagios-nrpe-plugin nagios-plugins-extra nagios-plugins-basic
+# sudo vim /etc/nagios/nrpe.cfg
