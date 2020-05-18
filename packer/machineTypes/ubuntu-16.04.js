@@ -8,6 +8,7 @@ export default ({ location, vm_name }) => [
   },
   {
     type: 'shell',
+    environment_vars: [`HOSTNAME=${vm_name}`],
     script: `${process.cwd()}/packer/machineTypes/ubuntu-16.04-network-setup.sh`,
     execute_command:
       "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
