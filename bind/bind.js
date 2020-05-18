@@ -3,7 +3,8 @@ export default {
   machineType: 'ubuntu-16.04',
   supportsInitialBuild: false,
   overrides: {
-    ram: 1024,
+    ram: 512,
+    CPUs: 2,
   },
   buildType: 'packer',
   supportFiles: false,

@@ -118,6 +118,7 @@ import { ssh } from './packer/builders/common';
         `level0/`,
         ''
       )}-setup.sh`,
+      environment_vars: [`RESTORE=${ops.restore}`],
       execute_command:
         "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
     });
