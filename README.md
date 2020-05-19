@@ -147,69 +147,8 @@ An ubuntu dhcp server with a failover peer for redundancy. Use the 'dominance' f
 
 support:
 
-- Build - OK
-- Backups - OK
-
-BUILD
-
-```
-
-packer build \
--var 'dominance=<master|backup>' \
--var 'pool=<192.168.16.5 Dedicated|192.168.16.6 Dedicated>' \
--var-file=configuration/packer-variables.json \
--var 'folder=<esx1-dedicated|esx2-dedicated>' \
--var 'ipaddr=<192.168.16.23|192.168.16.49>/24' \
-packer-scripts/dhcp/dhcp.json
-
-```
-
-packer build \
--var 'dominance=master' \
--var 'pool=192.168.16.5 Dedicated' \
--var-file=configuration/packer-variables.json \
--var 'folder=esx1-dedicated' \
--var 'ipaddr=192.168.16.23/24' \
-packer-scripts/dhcp/dhcp.json
-
-packer build \
--var 'dominance=backup' \
--var 'pool=192.168.16.6 Dedicated' \
--var-file=configuration/packer-variables.json \
--var 'folder=esx2-dedicated' \
--var 'ipaddr=192.168.16.49/24' \
-packer-scripts/dhcp/dhcp.json
-
-BACKUP
-
-```
-
-scp -r user@ds-dhcp-<master|backup>:/etc/dhcp/\* configuration/ds-dhcp-<master|backup>/etc/dhcp/
-// todo: backup sqlite
-
-```
-
-scp -r user@ds-dhcp-master:/etc/dhcp/\* configuration/ds-dhcp-master/etc/dhcp/
-
-scp -r user@ds-dhcp-backup:/etc/dhcp/\* configuration/ds-dhcp-backup/etc/dhcp/
-
-UPDATE SETTINGS
-
-```
-
-scp -r configuration/ds-dhcp-master/etc/dhcp/ user@ds-dhcp-master:~
-export PASS=<password>
-echo \$PASS | ssh user@ds-dhcp-master sudo -S sh -c '"cp -r ~/dhcp/\* /etc/dhcp/ && service isc-dhcp-server restart && service isc-dhcp-server status"'
-
-```
-
-GET MACHINE IP
-
-```
-
-ssh user@ds-dhcp-master cat /var/lib/dhcp/dhcpd.leases
-
-```
+- Build - Needs updating
+- Backups - In progress...
 
 #### Open vSwitch
 
