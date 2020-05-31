@@ -1,3 +1,5 @@
+import webmin from '../utilities/webmin/webmin';
+
 export default {
   mode: 'level2',
   machineType: 'ubuntu-16.04',
@@ -8,4 +10,8 @@ export default {
   },
   buildType: 'packer',
   supportFiles: false,
+  builder: ({ targetPlatform }) => ({
+    builders: [],
+    provisioners: [...webmin],
+  }),
 };
