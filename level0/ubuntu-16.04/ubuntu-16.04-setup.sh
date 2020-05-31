@@ -19,7 +19,3 @@ sudo tune2fs -c 1 /dev/sda1
 
 # todo: sudo rsync
 # https://askubuntu.com/questions/719439/using-rsync-with-sudo-on-the-destination-machine
-
-# todo: setup nagios monitoring
-# sudo apt-get install nagios-nrpe-server nagios-plugins openssl nagios-nrpe-plugin nagios-plugins-extra nagios-plugins-basic
-# sudo vim /etc/nagios/nrpe.cfg
