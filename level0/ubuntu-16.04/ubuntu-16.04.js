@@ -16,10 +16,7 @@ export default {
                 iso_checksum: '24636fd103a2a43c95659f1c3c63718e',
                 iso_checksum_type: 'md5',
               }
-            : {
-                // iso_paths:
-                //   '[Local Datastore] Installations/ubuntu-16.04.5-server-amd64.iso',
-              })(),
+            : {})(),
         boot_command: [
           '<enter><wait><f6><wait><esc><wait>',
           '<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>',
