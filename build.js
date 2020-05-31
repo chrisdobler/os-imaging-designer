@@ -49,6 +49,10 @@ import { ssh } from './packer/builders/common';
     },
   });
 
+  const dir = 'tmp/';
+  const configFile = 'config.json';
+  const vm_name = ops.name;
+
   // import the deployment profile
   const profile = await import(
     `../configuration/profiles/${ops.profile.substring(
@@ -79,11 +83,15 @@ import { ssh } from './packer/builders/common';
     machineTypeSpecific = machineTypeSpecific.default;
   }
 
-  const packer = () => {
-    const dir = 'tmp/';
-    const configFile = 'config.json';
-    const vm_name = ops.name;
+  // import the machine custom settings
+  let machineSettings = { network: {} };
+  try {
+    machineSettings = await import(
+      `../configuration/${location && `${location}/`}${vm_name}/settings.json`
+    );
+  } catch (e) {}
 
+  const packer = () => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
@@ -153,7 +161,16 @@ import { ssh } from './packer/builders/common';
 
     if (type.mode !== 'level0')
       output.provisioners.unshift(
-        ...machineTypeSpecific({ vm_name, location })
+        ...machineTypeSpecific({
+          vm_name,
+          location,
+          ...(machineSettings.network.address
+            ? {
+                ...profile['default-static-network'],
+                ...machineSettings.network,
+              }
+            : {}),
+        })
       );
 
     fs.writeFileSync(
@@ -162,16 +179,15 @@ import { ssh } from './packer/builders/common';
       'utf8'
     );
 
-    const child = spawn(
-      'packer',
-      [
-        'build',
-        // ops.force && `-force`,
+    const args = ['build'];
+    if (ops.force) args.push(`-force`);
+    args.push(
+      ...[
         `-var-file=../configuration/packer-variables.json`,
         `${dir}${configFile}`,
-      ],
-      { encoding: 'utf8' }
+      ]
     );
+    const child = spawn('packer', args, { encoding: 'utf8' });
 
     child.stdout.on('data', (data) => {
       console.log(`${data}`);
