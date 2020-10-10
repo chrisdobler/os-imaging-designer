@@ -354,7 +354,7 @@ restore:
 
 ```
 
-scp -r /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin/zfs-replicate root@ds-freenas2:/root/bin/
+scp -r /Users/chris/Projects/machines/configuration/buffalo/ds-freenas2/root/bin/zfs-replicate root@ds-freenas2:/root/bin/
 
 ```
 
@@ -362,7 +362,7 @@ backup settings:
 
 ```
 
-scp -r root@ds-freenas2:/root/bin/zfs-replicate/ /Users/chris/Projects/machines/configuration/ds-freenas2/root/bin
+scp -r root@ds-freenas2:/root/bin/zfs-replicate/ /Users/chris/Projects/machines/configuration/buffalo/ds-freenas2/root/bin
 
 ```
 
@@ -398,6 +398,22 @@ BUILD
 
 ```
 yarn deploy --profile esx4-pauline.json --name unifi-network-pauline --type unifi-network
+
+```
+
+### Ubiquiti Unifi Video Controller
+
+reference: https://www.ui.com/download/unifi-video/
+
+support:
+
+- Build - in progress
+- Backups - in progress
+
+BUILD
+
+```
+yarn deploy --profile esx4-pauline.json --name unifi-network-pauline --type unifi-video
 
 ```
 
