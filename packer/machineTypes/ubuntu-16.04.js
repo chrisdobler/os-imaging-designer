@@ -20,7 +20,7 @@ export default ({
       `ADDRESS=${address}`,
       `NETMASK=${netmask}`,
       `GATEWAY=${gateway}`,
-      `DNS_NAMESERVERS=${dns_nameservers}`,
+      `DNSNAMESERVERS=\"${dns_nameservers}\"`,
     ],
     script: `${process.cwd()}/packer/machineTypes/ubuntu-16.04-network-setup.sh`,
     execute_command:

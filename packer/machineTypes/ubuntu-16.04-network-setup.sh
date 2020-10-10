@@ -18,4 +18,4 @@ iface ens192 inet static
 address $ADDRESS
 netmask $NETMASK
 gateway $GATEWAY
-dns-nameservers $DNS_NAMESERVERS" > /etc/network/interfaces
+dns-nameservers $DNSNAMESERVERS" > /etc/network/interfaces

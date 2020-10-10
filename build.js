@@ -117,6 +117,9 @@ import { ssh } from './packer/builders/common';
           : {}),
         vm_name,
         ...ssh,
+        ...(machineSettings.buildOverrides
+          ? machineSettings.buildOverrides
+          : {}),
       },
     ];
 
@@ -164,7 +167,7 @@ import { ssh } from './packer/builders/common';
         ...machineTypeSpecific({
           vm_name,
           location,
-          ...(machineSettings.network.address
+          ...(machineSettings.network && machineSettings.network.address
             ? {
                 ...profile['default-static-network'],
                 ...machineSettings.network,
