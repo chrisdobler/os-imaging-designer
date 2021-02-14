@@ -410,13 +410,6 @@ support:
 - Build - in progress
 - Backups - in progress
 
-BUILD
-
-```
-yarn deploy --profile esx4-pauline.json --name unifi-network-pauline --type unifi-video
-
-```
-
 ### level0 Ubuntu 16.04
 
 This is a base build script to install the operating system and perform as much shared config as possible before passing up to a specific builder.
@@ -425,6 +418,12 @@ This is a base build script to install the operating system and perform as much 
 - Installs recommended baseline sotware
 - Updates system
 - todo: remove splash screen
+
+```
+
+yarn deploy --profile esx4-pauline.json --name ubuntu-16.04-template --type level0/ubuntu-16.04
+
+```
 
 ### level0 Windows 2012
 

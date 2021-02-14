@@ -109,7 +109,7 @@ import { ssh } from './packer/builders/common';
     output.builders = [
       {
         ...(output && output.builders[0]),
-        ...platformModes(profile.variables)[type.mode],
+        ...platformModes({ ...profile.variables, vm_name })[type.mode],
         ...(type.overrides || {}),
         ...profile.options,
         ...(profile.media && profile.media[ops.type.replace(`level0/`, '')]
