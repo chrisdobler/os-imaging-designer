@@ -6,11 +6,9 @@ export default {
         disk_size: 32768,
         guest_os_type: 'windows9_64Guest',
         floppy_files: [`${process.cwd()}/level0/windows2012/setup/`],
-        floppy_img_path:
-          '[datastore1] ISO/VMware Tools/10.2.0/pvscsi-Windows8.flp',
         iso_paths: [
           '[Installations] PC/Microsoft/Windows2012/Windows2012R2.iso',
-          '[Installations] PC/Microsoft/Windows2012/vm-tools.iso',
+          '[Installations] VMware/tools/windows/10.1/vmtools/windows.iso',
         ],
         ...(() => (targetPlatform === 'vmware-workstation' ? {} : {}))(),
       },

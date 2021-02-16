@@ -91,7 +91,7 @@
 
             <AutoLogon>
                 <Enabled>true</Enabled>
-                <Username>user</Username>
+                <Username>Administrator</Username>
                 <Password>
                     <Value>G4tHmkMmc</Value>
                     <PlainText>true</PlainText>

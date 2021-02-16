@@ -32,6 +32,7 @@
         "[datastore1] ISO/en_windows_10_multi-edition_vl_version_1709_updated_dec_2017_x64_dvd_100406172.iso",
         "[datastore1] ISO/VMware Tools/10.2.0/windows.iso"
       ]
+    }
   ],
 
   "provisioners": [

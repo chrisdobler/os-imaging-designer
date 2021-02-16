@@ -69,19 +69,16 @@ import { communicators } from './packer/builders/common';
   );
 
   // import the type of machine to create
-  const { default: type } = await import(
-    `./${ops.type}/${ops.type.substring(
-      ops.type.indexOf('/') + 1,
-      ops.type.length
-    )}.js`
+  const declaredType = ops.type.substring(
+    ops.type.indexOf('/') + 1,
+    ops.type.length
   );
+  const { default: type } = await import(`./${ops.type}/${declaredType}.js`);
 
-  if (type.mode !== 'level0') {
-    machineTypeSpecific = await import(
-      `./packer/machineTypes/${type.machineType}.js`
-    );
-    machineTypeSpecific = machineTypeSpecific.default;
-  }
+  machineTypeSpecific = await import(
+    `./packer/machineTypes/${type.machineType || declaredType}.js`
+  );
+  machineTypeSpecific = machineTypeSpecific.default;
 
   // import the machine custom settings
   let machineSettings = { network: {} };
