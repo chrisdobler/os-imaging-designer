@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import fs from 'fs';
 import prettier from 'prettier';
 import stdio from 'stdio';
-import { ssh } from './packer/builders/common';
+import { communicators } from './packer/builders/common';
 
 // packer build \
 // -var 'pool=Automated Machines' \
@@ -106,6 +106,17 @@ import { ssh } from './packer/builders/common';
           provisioners: [],
         };
 
+    const machineTypeSpecificConfig = machineTypeSpecific({
+      vm_name,
+      location,
+      ...(machineSettings.network && machineSettings.network.address
+        ? {
+            ...profile['default-static-network'],
+            ...machineSettings.network,
+          }
+        : {}),
+    });
+
     output.builders = [
       {
         ...(output && output.builders[0]),
@@ -116,23 +127,28 @@ import { ssh } from './packer/builders/common';
           ? profile.media[ops.type.replace(`level0/`, '')]
           : {}),
         vm_name,
-        ...ssh,
+        ...communicators[machineTypeSpecificConfig.communicator],
         ...(machineSettings.buildOverrides
           ? machineSettings.buildOverrides
           : {}),
       },
     ];
 
-    output.provisioners.push({
-      type: 'shell',
-      script: `${process.cwd()}/${ops.type}/${ops.type.replace(
-        `level0/`,
-        ''
-      )}-setup.sh`,
-      environment_vars: [`RESTORE=${ops.restore}`],
-      execute_command:
-        "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
-    });
+    const setupScriptPath = `${process.cwd()}/${ops.type}/${ops.type.replace(
+      `level0/`,
+      ''
+    )}-setup.sh`;
+
+    if (fs.existsSync(setupScriptPath)) {
+      console.log('adding shell setup script');
+      output.provisioners.push({
+        type: 'shell',
+        script: setupScriptPath,
+        environment_vars: [`RESTORE=${ops.restore}`],
+        execute_command:
+          "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
+      });
+    } else console.log('skipping shell setup script');
 
     // if restoring config
     if (ops.restore)
@@ -163,18 +179,7 @@ import { ssh } from './packer/builders/common';
       });
 
     if (type.mode !== 'level0')
-      output.provisioners.unshift(
-        ...machineTypeSpecific({
-          vm_name,
-          location,
-          ...(machineSettings.network && machineSettings.network.address
-            ? {
-                ...profile['default-static-network'],
-                ...machineSettings.network,
-              }
-            : {}),
-        })
-      );
+      output.provisioners.unshift(...machineTypeSpecificConfig.provisioners);
 
     fs.writeFileSync(
       `${dir}${configFile}`,
