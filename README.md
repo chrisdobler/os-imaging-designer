@@ -114,6 +114,15 @@ chmod +x start.sh
 ./start.sh
 ```
 
+#### Node Red Server
+
+reference: https://nodered.org/
+
+support:
+
+- build - OK
+- backups - PENDING
+
 #### Pi Hole Server
 
 reference: https://pi-hole.net/, https://github.com/pi-hole/pi-hole
@@ -139,6 +148,14 @@ BACKUP
 
 scp -r user@192.168.16.4:/etc/pihole/\* configuration/ds-pi-hole/etc/pihole/
 
+```
+
+UPDATE
+
+```
+cd /etc/.pihole
+sudo git pull
+sudo /etc/.pihole/automated\ install/basic-install.sh
 ```
 
 #### DHCP ISC Server Cluster
@@ -425,6 +442,16 @@ yarn deploy --profile esx4-pauline.json --name ubuntu-16.04-template --type leve
 
 ```
 
+Application Level Prebuilds:
+
+#### level1 Node with NPM
+
+```
+
+yarn deploy --profile vcenter.whiteoak.json --name node-ubuntu-16.04-template --type level1/ubuntu-16.04/node
+
+```
+
 ### level0 Windows 2012
 
 ```
@@ -439,6 +466,8 @@ packer-scripts/level0/windows2012/windows2012.json
 
 ```
 
-```
+### level0 Windows 10
 
+```
+yarn deploy --profile vcenter.whiteoak.json --name windows10-template --type level0/windows10
 ```

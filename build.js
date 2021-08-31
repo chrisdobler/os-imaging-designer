@@ -70,7 +70,7 @@ import { communicators } from './packer/builders/common';
 
   // import the type of machine to create
   const declaredType = ops.type.substring(
-    ops.type.indexOf('/') + 1,
+    ops.type.lastIndexOf('/') + 1,
     ops.type.length
   );
   const { default: type } = await import(`./${ops.type}/${declaredType}.js`);
