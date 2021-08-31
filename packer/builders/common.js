@@ -7,12 +7,12 @@ module.exports = {
       ssh_password: '{{user `ssh_password`}}',
     },
 
-    winRM: {
+    winrm: {
       communicator: 'winrm',
-      winrm_username: '{{user `winrm_username`}}',
-      winrm_password: '{{user `winrm_password`}}',
+      winrm_username: '{{user `windows_template_user`}}',
+      // winrm_password: '{{user `windows_template_password`}}',
     },
-  }
+  },
   fusionClone: ({ vm_name, path }) => ({
     type: 'vmware-vmx',
     source_path: `${path}${vm_name}/${vm_name}.vmx`,

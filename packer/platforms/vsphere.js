@@ -16,7 +16,7 @@ export default (v) => ({
     vm_version: 11,
     // cpu_cores: 4,
     CPUs: 4,
-    ram: '2048',
+    ram: '3000',
 
     // network: 'Public LAN',
     network: v.network,
