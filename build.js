@@ -73,12 +73,34 @@ import { communicators } from './packer/builders/common';
     ops.type.lastIndexOf('/') + 1,
     ops.type.length
   );
+
   const { default: type } = await import(`./${ops.type}/${declaredType}.js`);
 
-  machineTypeSpecific = await import(
-    `./packer/machineTypes/${type.machineType || declaredType}.js`
-  );
-  machineTypeSpecific = machineTypeSpecific.default;
+  console.log(type, declaredType);
+
+  const machineTypeSettingsPossibilitiesOrdered = [
+    declaredType,
+    ...(type.machineType ? type.machineType : []),
+    ...(type.machineType
+      ? type.machineType.slice(
+          type.machineType.indexOf('-') + 1,
+          type.machineType.length
+        )
+      : []),
+  ];
+
+  for (let i = 0; i < machineTypeSettingsPossibilitiesOrdered.length; i++) {
+    try {
+      const machineType = machineTypeSettingsPossibilitiesOrdered[i];
+      machineTypeSpecific = await import(
+        `./packer/machineTypes/${machineType}.js`
+      );
+      machineTypeSpecific = machineTypeSpecific.default;
+    } catch (e) {
+      console.error('Error importing machine type settings for ', machineType);
+      console.error(e);
+    }
+  }
 
   // import the machine custom settings
   let machineSettings = { network: {} };
@@ -175,6 +197,7 @@ import { communicators } from './packer/builders/common';
         destination: '/home/user',
       });
 
+    console.log(machineTypeSpecificConfig, machineSettings);
     if (type.mode !== 'level0')
       output.provisioners.unshift(...machineTypeSpecificConfig.provisioners);
 
