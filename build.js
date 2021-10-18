@@ -80,12 +80,14 @@ import { communicators } from './packer/builders/common';
 
   const machineTypeSettingsPossibilitiesOrdered = [
     declaredType,
-    ...(type.machineType ? type.machineType : []),
+    ...(type.machineType ? [type.machineType] : []),
     ...(type.machineType
-      ? type.machineType.slice(
-          type.machineType.indexOf('-') + 1,
-          type.machineType.length
-        )
+      ? [
+          type.machineType.slice(
+            type.machineType.indexOf('-') + 1,
+            type.machineType.length
+          ),
+        ]
       : []),
   ];
 
@@ -97,8 +99,12 @@ import { communicators } from './packer/builders/common';
       );
       machineTypeSpecific = machineTypeSpecific.default;
     } catch (e) {
-      console.error('Error importing machine type settings for ', machineType);
-      console.error(e);
+      ops.verbose &&
+        console.error(
+          'Error importing machine type settings for ',
+          machineTypeSettingsPossibilitiesOrdered[i]
+        );
+      ops.verbose && console.error(e);
     }
   }
 
