@@ -2,7 +2,12 @@ sudo rm /var/lib/dpkg/lock
 sudo apt-get -y update
 sudo apt-get -y upgrade
 
-sudo apt-get install -y vim htop curl git iperf3
+sudo apt-get install -y vim htop curl git iperf3 software-properties-common
+
+# add java 16
+sudo add-apt-repository ppa:linuxuprising/java
+sudo apt update
+sudo apt install oracle-java16-installer --install-recommends
 
 sudo mkdir .ssh
 sudo mv id_rsa.pub .ssh/authorized_keys
