@@ -159,9 +159,9 @@ import { communicators } from './packer/builders/common';
       },
     ];
 
-    const setupScriptPath = `${process.cwd()}/${ops.type}/${ops.type.replace(
-      `level0/`,
-      ''
+    const setupScriptPath = `${process.cwd()}/${ops.type}/${ops.type.substring(
+      ops.type.lastIndexOf('/') + 1,
+      ops.type.length
     )}-setup.sh`;
 
     if (fs.existsSync(setupScriptPath)) {
@@ -203,7 +203,6 @@ import { communicators } from './packer/builders/common';
         destination: '/home/user',
       });
 
-    console.log(machineTypeSpecificConfig, machineSettings);
     if (type.mode !== 'level0')
       output.provisioners.unshift(...machineTypeSpecificConfig.provisioners);
 

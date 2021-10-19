@@ -4,7 +4,7 @@ export default {
   supportsInitialBuild: false,
   supportFiles: false,
   builder: ({ vm_name, targetPlatform }) => ({
-    builders: [{}],
+    builders: [],
     provisioners: [],
   }),
 };
