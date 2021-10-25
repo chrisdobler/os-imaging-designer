@@ -33,6 +33,14 @@ export default (v) => ({
     folder: 'templates',
     ...common(v),
   },
+  level1: {
+    type: 'vsphere-clone',
+    template: 'templates/ubuntu-16.04-template',
+    convert_to_template: true,
+    create_snapshot: false,
+    folder: 'templates',
+    ...common(v),
+  },
   level2: {
     type: 'vsphere-clone',
     template: 'templates/ubuntu-16.04-template',
