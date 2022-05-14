@@ -212,16 +212,29 @@ import { communicators } from './packer/builders/common';
       'utf8'
     );
 
-    const args = ['build'];
+    const args = [
+      `run`,
+      `--name`,
+      `osImager`,
+      `-P`,
+      `-v`,
+      `/Users/chris/Projects/machines:/data`,
+      `--rm`,
+      `test/osimager`,
+      `packer`,
+      `build`,
+    ];
     if (ops.force) args.push(`-force`);
     args.push(
       ...[
-        `-var-file=../configuration/packer-variables.json`,
-        `${dir}${configFile}`,
+        `-var-file=/data/configuration/packer-variables.json`,
+        `/data/packer-scripts/${dir}${configFile}`,
       ]
     );
-    const child = spawn('packer', args, { encoding: 'utf8' });
+    // const child = spawn('packer', args, { encoding: 'utf8' });
+    const child = spawn('docker', args, { encoding: 'utf8' });
 
+    console.log(`command: packer ${args}`);
     child.stdout.on('data', (data) => {
       console.log(`${data}`);
     });
