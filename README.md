@@ -24,13 +24,14 @@ Ideally you run these scripts from one level up from you working directory so th
 
 ## Prepare Local Environment
 
-see: https://github.com/vmware/govmomi/releases
+you'll need to prepare the docker environment for the build system
+docker build -t test/osimager .
 
-```
-% export URL_TO_BINARY=https://*
-% curl -L $URL_TO_BINARY | gunzip > /usr/local/bin/govc
-% chmod +x /usr/local/bin/govc
-```
+<!-- docker run -dit --name osimager -P -v /Users/chris/Projects/machines/packer-scripts:/usr/src/app test/osimager -->
+
+docker run --name osImager -P -v /Users/chris/Projects/machines/packer-scripts:/data --rm test/osimager ls /data
+
+## How to create the scripting library for your configuration collection
 
 create profiles for all your deployment targets:
 
