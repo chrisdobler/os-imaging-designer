@@ -25,6 +25,7 @@ Ideally you run these scripts from one level up from you working directory so th
 ## Prepare Local Environment
 
 you'll need to prepare the docker environment for the build system
+
 docker build -t test/osimager .
 
 <!-- docker run -dit --name osimager -P -v /Users/chris/Projects/machines/packer-scripts:/usr/src/app test/osimager -->
@@ -402,6 +403,10 @@ manually start replicator:
 /root/bin/zfs-replicate/copy-operation/zfs-replicate.sh /root/bin/zfs-replicate/copy-operation/config.sh
 
 ```
+
+### Mersenne Prime Number Search
+
+reference: https://www.mersenne.org/
 
 ### Ubiquiti Unifi Network Controller
 
