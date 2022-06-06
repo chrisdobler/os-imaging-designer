@@ -12,6 +12,10 @@ import { communicators } from './packer/builders/common';
 // -var 'ipaddr=192.168.15.151/24' \
 // packer-scripts/unifi-network/unifi-network.json
 
+// the path that the script child runs from
+const buildPath = '/data';
+const packerScripts = `${buildPath}/packer-scripts`;
+
 (async () => {
   const ops = stdio.getopt({
     profile: {
@@ -132,6 +136,7 @@ import { communicators } from './packer/builders/common';
         };
 
     const machineTypeSpecificConfig = machineTypeSpecific({
+      packerScriptsLocation: packerScripts,
       vm_name,
       location,
       ...(machineSettings.network && machineSettings.network.address
@@ -159,17 +164,18 @@ import { communicators } from './packer/builders/common';
       },
     ];
 
-    const setupScriptPath = `${process.cwd()}/${ops.type}/${ops.type.substring(
+    const setupScriptPath = `${ops.type}/${ops.type.substring(
       ops.type.lastIndexOf('/') + 1,
       ops.type.length
     )}-setup.sh`;
 
-    if (fs.existsSync(setupScriptPath)) {
+    // Adds shell script
+    if (fs.existsSync(`${process.cwd()}/${setupScriptPath}`)) {
       console.log('adding shell setup script');
       output.provisioners.push({
         type: 'shell',
-        script: setupScriptPath,
-        environment_vars: [`RESTORE=${ops.restore}`],
+        script: `${packerScripts}/${setupScriptPath}`,
+        environment_vars: [`RESTORE=${!!ops.restore}`],
         execute_command:
           "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
       });
@@ -218,7 +224,7 @@ import { communicators } from './packer/builders/common';
       `osImager`,
       `-P`,
       `-v`,
-      `/Users/chris/Projects/machines:/data`,
+      `/Users/chris/Projects/machines:${buildPath}`,
       `--rm`,
       `test/osimager`,
       `packer`,
@@ -227,8 +233,8 @@ import { communicators } from './packer/builders/common';
     if (ops.force) args.push(`-force`);
     args.push(
       ...[
-        `-var-file=/data/configuration/packer-variables.json`,
-        `/data/packer-scripts/${dir}${configFile}`,
+        `-var-file=${buildPath}/configuration/packer-variables.json`,
+        `${packerScripts}/${dir}${configFile}`,
       ]
     );
     // const child = spawn('packer', args, { encoding: 'utf8' });
