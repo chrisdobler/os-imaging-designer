@@ -5,6 +5,7 @@ export default ({
   netmask,
   gateway,
   dns_nameservers,
+  packerScriptsLocation,
 }) => ({
   provisioners: [
     // {
@@ -25,7 +26,7 @@ export default ({
               `GATEWAY=${gateway}`,
               `DNSNAMESERVERS=\"${dns_nameservers}\"`,
             ],
-            script: `${process.cwd()}/packer/machineTypes/ubuntu-16.04-network-setup.sh`,
+            script: `${packerScriptsLocation}/packer/machineTypes/ubuntu-16.04-network-setup.sh`,
             execute_command:
               "echo '{{user `ubuntu_template_password`}}' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
           },
