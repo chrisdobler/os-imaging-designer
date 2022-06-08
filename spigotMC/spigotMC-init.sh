@@ -3,8 +3,8 @@ mkdir build_tools
 cd build_tools
 wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 git config --global --unset core.autocrlf
-java -jar BuildTools.jar --rev 1.16.1
-mv spigot-1.16.1.jar ../minecraft_server/spigot.jar
+java -jar BuildTools.jar --rev 1.17.1
+mv spigot-1.17.1.jar ../minecraft_server/spigot.jar
 cd ..
 cd minecraft_server
 echo '#!/bin/sh\n
